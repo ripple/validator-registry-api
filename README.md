@@ -7,7 +7,7 @@ a [Sails](http://sailsjs.org) application
 
 ## HTML Pages
 
-#### GET /
+##### GET /
 
 ### Validators and Validations
 
