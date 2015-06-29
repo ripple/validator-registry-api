@@ -5,6 +5,14 @@ and report on the state of the ripple peer network.
 
 a [Sails](http://sailsjs.org) application
 
+## Migrate
+
+Add db configuration to config/config.json
+
+````
+sequelize db:migrate
+````
+
 ## HTML Pages
 
 ##### GET /
