@@ -9,9 +9,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       validation_public_key: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       domain: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {

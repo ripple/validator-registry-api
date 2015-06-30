@@ -9,12 +9,15 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       validation_public_key: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       ledger_hash: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       reporter_public_key: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
