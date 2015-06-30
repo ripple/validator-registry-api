@@ -40,7 +40,35 @@ If both variables are set validator-registry-api will require basic auth in orde
 ##### GET /ledgers/:ledger_hash/validations
 ##### GET /ledgers/:ledger_hash/validations/:validation_public_key
 ##### POST /validations
-###### Request parameters
-* validation_public_key
-* ledger_hash
-* reporter_public_key
+
+# Local Hacking
+
+To hack on validators.ripple.com, you'll need:
+
+* Docker (``apt-get install docker``)
+* Docker-compose (``pip install docker-compose``)
+
+To build the environment:
+
+```
+$ docker-compose build
+$ docker-compose run webapp npm install
+$ docker-compose run webapp sequelize --url=postgres://postgres:postgres@postgres/postgres db:migrate
+```
+
+To bring up the environment:
+
+```
+$ docker-compose up
+```
+
+You'll now have validators.ripple.com running on localhost:1337.
+
+Any modifications to the code will require a restart of the webapp container.
+Usually you can ^C and re-run ``docker-compose up webapp``
+
+If you need a shell:
+
+```
+$ docker-compose run webapp /bin/bash
+```
