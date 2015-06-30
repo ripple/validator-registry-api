@@ -5,6 +5,20 @@ and report on the state of the ripple peer network.
 
 a [Sails](http://sailsjs.org) application
 
+## Migrate
+
+Add db configuration to config/config.json
+
+````
+sequelize db:migrate --url YOUR_POSTGRES_DB_URL
+````
+
+## Run
+
+````
+DATABASE_URL=YOUR_POSTGRES_DB_URL npm start
+````
+
 ## HTML Pages
 
 ##### GET /
