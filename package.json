@@ -31,7 +31,7 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "test": "mocha test/ --compilers=js:babel/register"
+    "test": "mocha test/ --compilers=js:babel/register --timeout 5000"
   },
   "main": "app.js",
   "repository": {
