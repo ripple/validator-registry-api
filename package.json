@@ -1,11 +1,11 @@
 {
-  "name": "ripple-sails-js",
-  "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
+  "name": "validators.ripple.com",
+  "version": "0.1.0",
+  "description": "ripple consensus network node registry",
   "keywords": [],
   "dependencies": {
     "babel": "^5.5.6",
+    "babel-runtime": "^5.6.15",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
     "grunt-contrib-clean": "~0.5.0",
