@@ -1,9 +1,7 @@
-import Sails from 'sails'
 import assert from 'assert'
+import helper from './test_helper'
 
 describe('sequelize database connection', () => {
-
-  before(done => Sails.lift(done))
 
   it('should have a connection to the database',() => {
 

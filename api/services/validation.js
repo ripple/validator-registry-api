@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Validation = sequelize.define('Validation', {
+  var Validation = sequelize.define('Validations', {
     validation_public_key: {
       type     : DataTypes.STRING,
       allowNull: false
