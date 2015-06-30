@@ -89,6 +89,11 @@ module.exports.routes = {
   '/peer-crawler/crawls/:id': {
     controller: 'crawler',
     action: 'show'
+  },
+
+  'post /validations': {
+    controller: 'validations',
+    action: 'create'
   }
 
   /***************************************************************************
