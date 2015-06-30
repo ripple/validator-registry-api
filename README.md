@@ -30,6 +30,7 @@ DATABASE_URL=YOUR_POSTGRES_DB_URL npm start
 ##### GET /validators/:public_key/validations
 ##### GET /ledgers/:ledger_hash/validations
 ##### GET /ledgers/:ledger_hash/validations/:validation_public_key
+##### POST /validations
 
 ### Incentivization
 
