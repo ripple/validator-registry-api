@@ -1,5 +1,5 @@
 import assert from 'assert'
-import helper from '../test_helper'
+import 'sails-test-helper'
 
 describe('Validation', () => {
 

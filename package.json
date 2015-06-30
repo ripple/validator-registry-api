@@ -41,6 +41,7 @@
   "author": "stevenzeiler",
   "license": "",
   "devDependencies": {
+    "sails-test-helper": "^0.4.4",
     "sequelize-cli": "^1.7.0"
   }
 }
