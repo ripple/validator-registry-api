@@ -19,5 +19,7 @@ describe('Validator', () => {
 
   it.skip('.create should require a validation_public_key')
   it.skip('.create should require a domain')
+  it.skip('.create should require validation_public_key and domain pair to be unique')
+  it.skip('#id should be auto-generated uuid')
 })
 
