@@ -1,0 +1,9 @@
+- name: Stand up logspout
+  docker:
+    name: logspout
+    state: reloaded
+    privileged: true
+    image: "gliderlabs/logspout"
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock"
+    command: "{{logspout_uri}}"

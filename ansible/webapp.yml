@@ -1,0 +1,46 @@
+---
+- name: Stand up application container host
+  hosts: web
+  sudo: true
+  user: ec2-user
+  vars:
+    nginx_config: "/opt/validators.ripple.com/nginx.conf"
+    nginx_ssl_key: "/opt/validators.ripple.com/server.key"
+    nginx_ssl_cert: "/opt/validators.ripple.com/server.crt"
+    nginx_dh_params: "/opt/validators.ripple.com/dhparam.pem"
+    nginx_webui_root: "/opt/validators.ripple.com/webui"
+  vars_files:
+    - private/webapp-{{deploy_environment}}.yml
+  pre_tasks:
+    - name: Ensure packages are installed
+      yum: name={{item}} state=latest
+      with_items:
+        - docker
+        - docker-python
+    - name: Ensure docker is running and enabled
+      service: name=docker state=started enabled=true
+    - name: Ensure config directory is created
+      file: state=directory name=/opt/validators.ripple.com
+    - name: Ensure webui directory is created
+      file: state=directory name={{nginx_webui_root}} owner=ec2-user group=ec2-user
+    - name: Configure nginx
+      template: src=templates/nginx.conf dest={{nginx_config}} mode=u+r
+      notify:
+        - reload nginx container
+    - name: Install SSL key
+      copy: src=private/validators.ripple.com.key dest={{nginx_ssl_key}}
+      notify:
+        - reload nginx container
+    - name: Install SSL cert
+      copy: src=private/validators.ripple.com.crt dest={{nginx_ssl_cert}}
+      notify:
+        - reload nginx container
+    - name: Install DH parameters
+      copy: src=private/dhparam.pem dest={{nginx_dh_params}}
+      notify:
+        - reload nginx container
+  roles:
+    - role: webapp
+    - role: nginx
+    - role: logspout
+      logspout_uri: "{{webapp_logspout_url}}"

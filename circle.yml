@@ -22,3 +22,5 @@ deployment:
     branch: docker
     commands:
       - ./push-to-docker.sh staging
+      - chmod a-rwx,u+r ansible/skynet-keys/*
+      - cd ansible && ansible-playbook -i hosts -l staging site.yml

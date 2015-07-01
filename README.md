@@ -72,3 +72,7 @@ If you need a shell:
 ```
 $ docker-compose run webapp /bin/bash
 ```
+
+# Deployment to validators.ripple.com
+
+Check the README in the ansible/ directory
