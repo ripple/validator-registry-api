@@ -42,17 +42,17 @@ module.exports.routes = {
     action: 'index'
   },
 
-  '/validators/:public_key': {
+  '/validators/:validation_public_key': {
     controller: 'validators',
     action: 'show'
   },
 
-  '/validators/:public_key/payouts': {
+  '/validators/:validation_public_key/payouts': {
     controller: 'validators',
     action: 'payouts'
   },
 
-  '/validators/:public_key/validations': {
+  '/validators/:validation_public_key/validations': {
     controller: 'validations',
     action: 'index'
   },

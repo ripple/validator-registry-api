@@ -10,7 +10,8 @@ module.exports = {
       },
       validation_public_key: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       domain: {
         allowNull: false,

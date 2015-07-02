@@ -3,6 +3,12 @@ import 'sails-test-helper'
 
 describe('Validation', () => {
 
+  beforeEach(function(done) {
+    database.Validations.truncate().then(() => {
+      done();
+    });
+  });
+
   it('.create should persist to the database',done => {
 
     const hash = 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
