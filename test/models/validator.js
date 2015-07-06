@@ -52,13 +52,17 @@ describe('Validator', () => {
       domain: domain
     })
     .then(() => {
-      database.Validators.create({
+      return database.Validators.create({
         validation_public_key: validation_public_key,
         domain: domain
       })
     })
     .then(validator => {
       expect(validator).to.not.exist;
+      done()
+    })
+    .catch(err => {
+      assert.strictEqual(err.message, 'Validation error')
       done()
     })
   })
