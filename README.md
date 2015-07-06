@@ -26,8 +26,8 @@ DATABASE_URL=YOUR_POSTGRES_DB_URL npm start
 ### Validators and Validations
 
 ##### GET /validators
-##### GET /validators/:public_key
-##### GET /validators/:public_key/validations
+##### GET /validators/:validation_public_key
+##### GET /validators/:validation_public_key/validations
 ##### GET /ledgers/:ledger_hash/validations
 ##### GET /ledgers/:ledger_hash/validations/:validation_public_key
 ##### POST /validations
@@ -37,7 +37,7 @@ DATABASE_URL=YOUR_POSTGRES_DB_URL npm start
 ##### GET /incentivization
 ##### GET /incentivization/payouts
 ##### GET /incentivization/payouts/:id
-##### GET /validators/:public_key/payouts
+##### GET /validators/:validation_public_key/payouts
 
 ### Peer Crawler
 

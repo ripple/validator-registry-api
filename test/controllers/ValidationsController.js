@@ -1,6 +1,12 @@
 import 'sails-test-helper'
 
 describe('ValidationsController', () => {
+  beforeEach(function(done) {
+    database.Validations.truncate().then(() => {
+      done();
+    });
+  });
+
   describe('POST create', () => {
     it('should save valid validation to the database',done => {
       let validation = {
