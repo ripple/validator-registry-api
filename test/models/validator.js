@@ -66,7 +66,5 @@ describe('Validator', () => {
       done()
     })
   })
-
-  it.skip('#id should be auto-generated uuid')
 })
 

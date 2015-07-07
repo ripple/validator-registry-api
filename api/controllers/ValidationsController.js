@@ -42,9 +42,24 @@ module.exports = {
    * `ValidationsController.index()`
    */
   index: function (req, res) {
-    return res.json({
-      todo: 'index() is not implemented yet!'
-    });
+    var validation_public_key = req.params.validation_public_key
+
+    if (!validation_public_key) {
+      return res.status(400).json({
+        message: "Requires 'validation_public_key'"
+      })
+    }
+
+    database.Validations.findAll({
+      where: {
+        validation_public_key: validation_public_key
+      }
+    })
+    .then(validations => {
+      return res.json({
+        validations: validations
+      })
+    })
   },
 
 
@@ -52,9 +67,24 @@ module.exports = {
    * `ValidationsController.show()`
    */
   show: function (req, res) {
-    return res.json({
-      todo: 'show() is not implemented yet!'
-    });
+    var ledger_hash = req.params.ledger_hash
+
+    if (!ledger_hash) {
+      return res.status(400).json({
+        message: "Requires 'ledger_hash'"
+      })
+    }
+
+    database.Validations.findAll({
+      where: {
+        ledger_hash: ledger_hash
+      }
+    })
+    .then(validations => {
+      return res.json({
+        validations: validations
+      })
+    })
   }
 };
 
