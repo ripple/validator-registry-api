@@ -31,17 +31,7 @@ DATABASE_URL=YOUR_POSTGRES_DB_URL npm start
 ##### GET /ledgers/:ledger_hash/validations
 ##### GET /ledgers/:ledger_hash/validations/:validation_public_key
 ##### POST /validations
-
-### Incentivization
-
-##### GET /incentivization
-##### GET /incentivization/payouts
-##### GET /incentivization/payouts/:id
-##### GET /validators/:validation_public_key/payouts
-
-### Peer Crawler
-
-##### GET /peer-crawler
-##### GET /peer-crawler/crawls
-##### GET /peer-crawler/crawls/:id
-
+###### Request parameters
+* validation_public_key
+* ledger_hash
+* reporter_public_key

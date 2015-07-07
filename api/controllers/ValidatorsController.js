@@ -26,11 +26,13 @@ module.exports = {
   show: function (req, res) {
 
     database.Validators.findOne({
-      validation_public_key: req.params.validation_public_key
+      where: {
+        validation_public_key: req.params.validation_public_key
+      }
     })
     .then(validator => {
       return res.json({
-        validator: validator.toJSON()
+        validator: validator ? validator.toJSON() : {}
       })
     })
   },
