@@ -6,6 +6,7 @@
   "dependencies": {
     "babel": "^5.5.6",
     "babel-runtime": "^5.6.15",
+    "basic-auth": "^1.0.3",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
     "grunt-contrib-clean": "~0.5.0",
@@ -31,7 +32,7 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "test": "mocha test/**/* --compilers=js:babel/register --timeout 5000"
+    "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 5000"
   },
   "main": "app.js",
   "repository": {

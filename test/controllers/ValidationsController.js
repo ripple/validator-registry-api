@@ -1,5 +1,8 @@
 import 'sails-test-helper'
 
+var BASIC_AUTH_USER = 'user'
+var BASIC_AUTH_PASS = 'pass'
+
 describe('ValidationsController', () => {
   beforeEach((done) => {
     database.Validations.truncate().then(() => {
@@ -7,8 +10,15 @@ describe('ValidationsController', () => {
     });
   });
 
-  describe('POST /validations', () => {
-    it('.create should save valid validation to the database',done => {
+  describe('POST create', () => {
+
+    it('should reject without basic auth credentials', done => {
+      request.post('/validations')
+        .expect(403)
+        .end(done)
+    })
+
+    it('should save valid validation to the database',done => {
       let validation = {
         validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
         reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
@@ -16,6 +26,7 @@ describe('ValidationsController', () => {
       }
       request.post('/validations')
         .send(validation)
+        .auth(BASIC_AUTH_USER, BASIC_AUTH_PASS)
         .expect(200)
         .end(done)
     })
@@ -27,6 +38,7 @@ describe('ValidationsController', () => {
       }
       request.post('/validations')
         .send(validation)
+        .auth(BASIC_AUTH_USER, BASIC_AUTH_PASS)
         .expect(400)
         .end(done)
     })
@@ -37,6 +49,7 @@ describe('ValidationsController', () => {
       }
       request.post('/validations')
         .send(validation)
+        .auth(BASIC_AUTH_USER, BASIC_AUTH_PASS)
         .expect(400)
         .end(done)
     })
@@ -47,6 +60,7 @@ describe('ValidationsController', () => {
       }
       request.post('/validations')
         .send(validation)
+        .auth(BASIC_AUTH_USER, BASIC_AUTH_PASS)
         .expect(400)
         .end(done)
     })
