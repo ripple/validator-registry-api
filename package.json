@@ -40,7 +40,7 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/stevenzeiler/ripple-sails-js.git"
+    "url": "git://github.com/ripple/validator-registry-api.git"
   },
   "author": "stevenzeiler",
   "license": "",
