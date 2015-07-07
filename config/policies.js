@@ -26,7 +26,11 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  '*': 'disableProduction'
+  '*': 'disableProduction',
+
+  ValidationsController: {
+    create: ['authenticateValidationTracker']
+  }
 
   /***************************************************************************
   *                                                                          *

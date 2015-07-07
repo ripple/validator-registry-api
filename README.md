@@ -19,6 +19,15 @@ sequelize db:migrate --url YOUR_POSTGRES_DB_URL
 DATABASE_URL=YOUR_POSTGRES_DB_URL npm start
 ````
 
+## Basic Authentication
+
+To require basic http authentication set the following environment variables:
+
+- BASIC_AUTH_USER (default undefined)
+- BASIC_AUTH_PASS (default undefined)
+
+If both variables are set validator-registry-api will require basic auth in order to POST to /validations
+
 ## HTML Pages
 
 ##### GET /
