@@ -47,11 +47,6 @@ module.exports.routes = {
     action: 'show'
   },
 
-  '/validators/:validation_public_key/payouts': {
-    controller: 'validators',
-    action: 'payouts'
-  },
-
   '/validators/:validation_public_key/validations': {
     controller: 'validations',
     action: 'index'
@@ -59,36 +54,6 @@ module.exports.routes = {
 
   '/ledgers/:ledger_hash/validations': {
     controller: 'validations',
-    action: 'show'
-  },
-
-  '/incentivization': {
-    controller: 'incentivization',
-    action: 'index' 
-  },
-
-  '/incentivization/payouts/': {
-    controller: 'payouts',
-    action: 'index'
-  },
-
-  '/incentivization/payouts/:id': {
-    controller: 'payouts',
-    action: 'show'
-  },
-
-  '/peer-crawler': {
-    controller: 'crawler',
-    action: 'index'
-  },
-
-  '/peer-crawler/crawls': {
-    controller: 'crawls',
-    action: 'index'
-  },
-
-  '/peer-crawler/crawls/:id': {
-    controller: 'crawler',
     action: 'show'
   },
 
