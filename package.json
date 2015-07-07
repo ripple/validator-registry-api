@@ -1,5 +1,5 @@
 {
-  "name": "validators.ripple.com",
+  "name": "validator-registry-api",
   "version": "0.1.0",
   "description": "ripple consensus network node registry",
   "keywords": [],
@@ -28,6 +28,9 @@
     "sails": "~0.11.0",
     "sails-disk": "~0.10.0",
     "sequelize": "^3.3.2"
+  },
+  "bin": {
+    "validator-registry-api": "./app.js"
   },
   "scripts": {
     "debug": "node debug app.js",
