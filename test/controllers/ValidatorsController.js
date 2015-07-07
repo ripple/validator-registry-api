@@ -5,7 +5,7 @@ const domain = 'ripple.com'
 
 describe('ValidatorsController', () => {
 
-  beforeEach(function(done) {
+  beforeEach((done) => {
     database.Validators.truncate()
     .then(() => {
       database.Validators.create({
@@ -20,12 +20,11 @@ describe('ValidatorsController', () => {
       })
     })
     .then(() => done());
-
   });
 
   describe('GET /validators', () => {
 
-    it('should return a list of validators', done => {
+    it('.index should return a list of validators', done => {
       request
         .get('/validators')
         .end((err, resp) => {
@@ -38,7 +37,7 @@ describe('ValidatorsController', () => {
 
   describe('GET /validators/:validation_public_key', () => {
 
-    it('should return a single validator', done => {
+    it('.show should return a single validator', done => {
 
       let url = `/validators/${validationPublicKey}`
       request
@@ -49,6 +48,15 @@ describe('ValidatorsController', () => {
           done()
         })
     })
- })
+
+    it('.show should return an empty if no validators found',done => {
+      request.get('/validator/dummy_validator')
+        .expect(200)
+        .end((err, resp) => {
+          expect(resp.body.validator).to.not.exist
+          done()
+        })
+    })
+  })
 })
 
