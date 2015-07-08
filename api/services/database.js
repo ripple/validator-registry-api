@@ -9,13 +9,15 @@ var sequelize = new Sequelize(process.env.DATABASE_URL, {
 });
 var db        = {};
 
+const MODELS_PATH = path.join(__dirname, '../models')
+
 fs
-  .readdirSync(__dirname)
+  .readdirSync(MODELS_PATH)
   .filter(function(file) {
     return (file.indexOf('.') !== 0) && (file !== basename);
   })
   .forEach(function(file) {
-    var model = sequelize['import'](path.join(__dirname, file));
+    var model = sequelize['import'](path.join(MODELS_PATH, file));
     db[model.name] = model;
   });
 

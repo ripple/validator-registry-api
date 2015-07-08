@@ -2,5 +2,5 @@ var path = require('path');
 
 module.exports = {
   'migrations-path': path.resolve('./', 'migrations'),
-  'models-path': path.resolve('./api', 'services')
+  'models-path': path.resolve('./api', 'models')
 }
