@@ -42,6 +42,16 @@ module.exports.routes = {
     action: 'index'
   },
 
+  'GET /validations': {
+    controller: 'validations',
+    action: 'index'
+  },
+
+  'POST /validations': {
+    controller: 'validations',
+    action: 'create'
+  },
+
   '/validators/:validation_public_key': {
     controller: 'validators',
     action: 'show'
@@ -49,17 +59,12 @@ module.exports.routes = {
 
   '/validators/:validation_public_key/validations': {
     controller: 'validations',
-    action: 'index'
+    action: 'indexByValidator'
   },
 
   '/ledgers/:ledger_hash/validations': {
     controller: 'validations',
-    action: 'show'
-  },
-
-  'post /validations': {
-    controller: 'validations',
-    action: 'create'
+    action: 'indexByLedger'
   }
 
   /***************************************************************************

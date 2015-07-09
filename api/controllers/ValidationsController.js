@@ -5,54 +5,45 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var db = require('../services/database');
+const Checkit = require('checkit')
+
+const validationCheckit = new Checkit({
+  validation_public_key: 'required',
+  ledger_hash: 'required',
+  reporter_public_key: 'required',
+})
 
 module.exports = {
-	
-
 
   /**
    * `ValidationsController.create()`
    */
   create: function (req, res) {
-    var validation_public_key = req.param('validation_public_key')
-    var ledger_hash = req.param('ledger_hash')
-    var reporter_public_key = req.param('reporter_public_key')
 
-    if (!validation_public_key || !ledger_hash || !reporter_public_key) {
-      return res.status(400).json({
-        message: "Requires 'validation_public_key', 'ledger_hash', and 'reporter_public_key'"
+    validationCheckit.run(req.body)
+    .then(() => {
+      res.status(200).send('OK')
+
+      database.Validations.create({
+        validation_public_key: req.body.validation_public_key,
+        ledger_hash: req.body.ledger_hash,
+        reporter_public_key: req.body.reporter_public_key
       })
-    }
-
-    res.status(200).send('OK')
-
-    return db.Validations.create({
-      validation_public_key: validation_public_key,
-      ledger_hash: ledger_hash,
-      reporter_public_key: reporter_public_key
     })
-    .catch(function(err) {
-      console.error(err)
+    .catch(error => {
+      res.status(400).json(error)
     })
   },
 
 
   /**
-   * `ValidationsController.index()`
+   * `ValidationsController.indexByValidator()`
    */
-  index: function (req, res) {
-    var validation_public_key = req.params.validation_public_key
-
-    if (!validation_public_key) {
-      return res.status(400).json({
-        message: "Requires 'validation_public_key'"
-      })
-    }
+  indexByValidator: function (req, res) {
 
     database.Validations.findAll({
       where: {
-        validation_public_key: validation_public_key
+        validation_public_key: req.params.validation_public_key
       }
     })
     .then(validations => {
@@ -62,22 +53,27 @@ module.exports = {
     })
   },
 
+  /**
+   * `ValidationsController.index()`
+   */
+  index: function (req, res) {
+
+    database.Validations.countByValidatorInLast24Hours() 
+      .then(validations => { 
+        res.status(200).json({ 
+          validations: validations 
+        }) 
+      })
+  },
 
   /**
-   * `ValidationsController.show()`
+   * `ValidationsController.indexByLedger()`
    */
-  show: function (req, res) {
-    var ledger_hash = req.params.ledger_hash
-
-    if (!ledger_hash) {
-      return res.status(400).json({
-        message: "Requires 'ledger_hash'"
-      })
-    }
+  indexByLedger: function (req, res) {
 
     database.Validations.findAll({
       where: {
-        ledger_hash: ledger_hash
+        ledger_hash: req.params.ledger_hash
       }
     })
     .then(validations => {
