@@ -1,12 +1,12 @@
-# Validators.ripple.com deployment
+# api.validators.ripple.com deployment
 
-Validators.ripple.com is the reference implementation of this validator registry
+api.validators.ripple.com is the reference implementation of this validator registry
 API. There are two deployment environments, staging and production. Both
 environments are composed of:
 
-- DNS entries for api.{environment}.validators.ripple.com and
+- DNS entries for api-{environment}.validators.ripple.com and
   {environment}.validators.ripple.com
-- One EC2 instance, with Name={environment}.validators.ripple.com
+- One EC2 instance, with Name=api-{environment}.validators.ripple.com
 - One RDS instance, named validators-{environment}.
 
 Deployment happens automatically via circleci:
