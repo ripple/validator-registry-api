@@ -1,7 +1,6 @@
 # validators-registry-api
 
-Node.js server application to track and reward validator performance,
-and report on the state of the ripple peer network.
+Node.js server application to track and publish rippled validator performance and ownership.
 
 a [Sails](http://sailsjs.org) application
 
