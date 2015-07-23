@@ -36,6 +36,19 @@ describe('Validation', () => {
     })
   })
 
+  it('.create should require a valid validation_public_key',done => {
+
+    database.Validations.create({
+      validation_public_key: 'ramcE1KE3gxHc8Yhs6hJtE55CrjkHUQyo',
+      reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
+      ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
+    })
+    .catch(err => {
+      assert.strictEqual(err.message, 'Validation error: Validation is failed')
+      done()
+    })
+  })
+
   it('.create should require a reporter_public_key',done => {
 
     database.Validations.create({

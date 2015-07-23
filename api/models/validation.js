@@ -5,7 +5,10 @@ module.exports = function(sequelize, DataTypes) {
   var Validation = sequelize.define('Validations', {
     validation_public_key: {
       type     : DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /^n([rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz]){51}$/i
+      }
     },
     ledger_hash: {
       type     : DataTypes.STRING,
