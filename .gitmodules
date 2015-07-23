@@ -1,0 +1,6 @@
+[submodule "ansible/skynet-keys"]
+	path = ansible/skynet-keys
+	url = git@github.com:codius/skynet-keys
+[submodule "ansible/private"]
+	path = ansible/private
+	url = git@github.com:ripple/validators.ripple.com-private

@@ -4,7 +4,16 @@ var fs        = require('fs');
 var path      = require('path');
 var Sequelize = require('sequelize');
 var basename  = path.basename(module.filename);
-var sequelize = new Sequelize(process.env.DATABASE_URL, {
+
+var dbURL = "";
+
+if (process.env.DATABASE_URL) {
+  dbURL = process.env.DATABASE_URL;
+} else if (process.env.POSTGRES_PORT_5432_TCP_ADDR) {
+  dbURL = 'postgres://postgres:postgres@'+process.env.POSTGRES_PORT_5432_TCP_ADDR+':'+process.env.POSTGRES_PORT_5432_TCP_PORT+'/postgres';
+}
+
+var sequelize = new Sequelize(dbURL, {
   logging: false
 });
 var db        = {};

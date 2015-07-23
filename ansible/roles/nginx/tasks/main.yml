@@ -1,0 +1,16 @@
+- name: Stand up nginx container
+  docker:
+    name: validatorsripplecom_nginx
+    image: nginx:latest
+    state: reloaded
+    links:
+      - validatorsripplecom_web:app
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - "{{nginx_config}}:/etc/nginx/conf.d/validators.ripple.com.conf:ro"
+      - "{{nginx_ssl_key}}:/etc/nginx/ssl/server.key:ro"
+      - "{{nginx_ssl_cert}}:/etc/nginx/ssl/server.crt:ro"
+      - "{{nginx_dh_params}}:/etc/nginx/ssl/dhparam.pem:ro"
+      - "{{nginx_webui_root}}:/srv/webui:ro"
