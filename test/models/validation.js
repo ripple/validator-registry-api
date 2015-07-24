@@ -93,5 +93,27 @@ describe('Validation', () => {
       }) 
     })
   })
+
+  it('.getValidators should return list of validators', done => {
+    database.Validations.create({
+      validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+      ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
+      reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
+    })
+    .then(() => {
+      return database.Validations.create({
+        validation_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
+        ledger_hash: '80B4EE4C8099ED4D063DCBDF59F1255BC80DEE3D01F2DA7472A1FD3C15954A03',
+        reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
+      })
+    })
+    .then(() => {
+      database.Validations.getValidators().then(validators => {
+        assert(validators instanceof Array)
+        assert.strictEqual(validators.length, 2)
+        done()
+      })
+    })
+  })
 })
 

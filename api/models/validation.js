@@ -36,6 +36,18 @@ module.exports = function(sequelize, DataTypes) {
         })
       },
 
+      getValidators: function() {
+        return sequelize.query(
+          'select distinct on (validation_public_key) validation_public_key from "Validations"'
+        ,{
+          type: sequelize.QueryTypes.SELECT
+        }).then(results => {
+          return results.map(result => {
+            return result.validation_public_key
+          })
+        })
+      },
+
       associate: function(models) {
         // associations can be defined here
       }
