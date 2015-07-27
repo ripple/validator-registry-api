@@ -41,7 +41,8 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 15000"
+    "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 15000",
+    "correlate": "grunt correlate"
   },
   "main": "app.js",
   "repository": {
