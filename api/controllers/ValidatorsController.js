@@ -10,42 +10,36 @@ module.exports = {
   /**
    * `ValidatorsController.index()`
    */
-  index: function (req, res) {
+  index: async function (req, res) {
 
-    database.Validators.findAll()
-      .then(validators => {
-        return res.json({
-          validators: validators
-        })
-      })
+    let validators = await database.Validations.getValidators()
+    for (let i=0; i<validators.length; i++) {
+      let verification = await database.Verifications.getVerificationStatus(validators[i])
+      validators[i] = {
+        validation_public_key: validators[i],
+        domain: verification.domain,
+        error: verification.error
+      }
+    }
+    return res.json({
+      validators: validators
+    })
   },
 
 
   /**
    * `ValidatorsController.show()`
    */
-  show: function (req, res) {
+  show: async function (req, res) {
 
-    database.Validators.findOne({
-      where: {
-        validation_public_key: req.params.validation_public_key
-      }
-    })
-    .then(validator => {
-      return res.json({
-        validator: validator ? validator.toJSON() : {}
-      })
+    let verification = await database.Verifications.getVerificationStatus(req.params.validation_public_key)
+    return res.json({
+      validator: verification ? {
+        validation_public_key: req.params.validation_public_key,
+        domain: verification.domain,
+        error: verification.error
+      } : {}
     })
   },
-
-
-  /**
-   * `ValidatorsController.payouts()`
-   */
-  payouts: function (req, res) {
-    return res.json({
-      todo: 'payouts() is not implemented yet!'
-    });
-  }
 };
 

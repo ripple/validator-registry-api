@@ -1,26 +1,32 @@
 import 'sails-test-helper'
 
-const validationPublicKey = 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz'
-const domain = 'ripple.com'
-
 describe('ValidatorsController', () => {
 
-  beforeEach((done) => {
-    database.Validators.truncate()
-    .then(() => {
-      database.Validators.create({
-        validation_public_key: validationPublicKey,
-        domain: domain
-      })
+  const validationPublicKey = 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz'
+  const domain = 'ripple.com'
+  before(async() => {
+    await database.Validations.truncate()
+    await database.Verifications.truncate()
+
+    await database.Validations.create({
+      validation_public_key: validationPublicKey,
+      reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
+      ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
     })
-    .then(() => {
-      database.Validators.create({
-        validation_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
-        domain: domain
-      })
+    await database.Verifications.create({
+      validation_public_key: validationPublicKey,
+      error: 'InvalidRippleAccount'
     })
-    .then(() => done());
+    await database.Verifications.create({
+      validation_public_key: validationPublicKey,
+      domain: domain
+    })
   });
+
+  after(async() => {
+    await database.Validations.truncate()
+    await database.Verifications.truncate()
+  })
 
   describe('GET /validators', () => {
 
@@ -29,7 +35,9 @@ describe('ValidatorsController', () => {
         .get('/validators')
         .end((err, resp) => {
           expect(resp.body.validators).to.be.instanceof(Array)
-          expect(resp.body.validators).to.have.length(2)
+          expect(resp.body.validators).to.have.length(1)
+          expect(resp.body.validators[0].validation_public_key).to.equal(validationPublicKey)
+          expect(resp.body.validators[0].domain).to.equal(domain)
           done()
         })
     })
