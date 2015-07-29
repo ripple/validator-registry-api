@@ -10,6 +10,7 @@
     "checkit": "^0.5.1",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
+    "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-coffee": "~0.10.1",
     "grunt-contrib-concat": "~0.3.0",
