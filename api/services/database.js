@@ -4,6 +4,7 @@ var fs        = require('fs');
 var path      = require('path');
 var Sequelize = require('sequelize');
 var basename  = path.basename(module.filename);
+var exec      = require('child-process-promise').exec;
 
 var dbURL = "";
 
@@ -38,5 +39,13 @@ Object.keys(db).forEach(function(modelName) {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+db.migrate = async function() {
+  const cmd = `sequelize --url=${dbURL} db:migrate`
+
+  const result = await exec(cmd)
+  console.log(result.stdout)
+  console.error(result.stderr)
+}
 
 module.exports = db;
