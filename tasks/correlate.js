@@ -8,7 +8,7 @@ module.exports = function (done) {
 
     const score = await CorrelationScore.find({ where: { date: date }})
 
-    if (score) {
+    if (score[0]) {
       console.error('Correlation Coefficients already computed for', date)
     } else {
       try {
