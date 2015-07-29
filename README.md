@@ -34,11 +34,33 @@ If both variables are set validator-registry-api will require basic auth in orde
 ### Validators and Validations
 
 ##### GET /validators
+Response:
+* Array of Validators
+
 ##### GET /validators/:validation_public_key
+Response:
+* Validator
+  * validation_public_key
+  * domain
+  * error
+
 ##### GET /validators/:validation_public_key/validations
+Response:
+* Array of Validations
+
 ##### GET /ledgers/:ledger_hash/validations
+Response:
+* Array of Validations
+
 ##### GET /ledgers/:ledger_hash/validations/:validation_public_key
+Response:
+* Array of Validations
+
 ##### POST /validations
+Request parameters:
+* validation_public_key
+* reporter_public_key
+* ledger_hash
 
 # Local Hacking
 
