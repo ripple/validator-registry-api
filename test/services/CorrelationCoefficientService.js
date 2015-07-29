@@ -21,18 +21,18 @@ describe('CorrelationCoefficientService', () => {
 
     const ledgers = Ledgers()
 
-    ledgers.forEach(ledgerHash => {
+    for (let ledgerHash of ledgers) {
 
-      alphaCluster.forEach(async validator => {
-
+      for (let validator of alphaCluster) {
         let validation = await database.Validations.create({
           ledger_hash: ledgerHash,
           validation_public_key: validator,
           reporter_public_key: validator
         })
-      })
+      }
 
-      otherCluster.forEach(async validator => {
+      for (let validator of otherCluster) {
+
         if (ledgers.indexOf(ledgerHash) % 2 === 0) {
           let validation = await database.Validations.create({
             ledger_hash: ledgerHash,
@@ -40,8 +40,8 @@ describe('CorrelationCoefficientService', () => {
             reporter_public_key: validator
           })
         }
-      })
-    })
+      }
+    }
   })
 
   it('should calculate the correlation coefficient', done => {
