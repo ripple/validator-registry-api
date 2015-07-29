@@ -5,7 +5,10 @@ module.exports = function(sequelize, DataTypes) {
   var Validation = sequelize.define('Validations', {
     validation_public_key: {
       type     : DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /^n([rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz]){51}$/i
+      }
     },
     ledger_hash: {
       type     : DataTypes.STRING,
@@ -29,6 +32,18 @@ module.exports = function(sequelize, DataTypes) {
               validations_count: parseInt(result.sum),
               validation_public_key: result.validation_public_key
             }
+          })
+        })
+      },
+
+      getValidators: function() {
+        return sequelize.query(
+          'select distinct on (validation_public_key) validation_public_key from "Validations"'
+        ,{
+          type: sequelize.QueryTypes.SELECT
+        }).then(results => {
+          return results.map(result => {
+            return result.validation_public_key
           })
         })
       },
