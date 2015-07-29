@@ -4,8 +4,8 @@
   "description": "ripple consensus network node registry",
   "keywords": [],
   "dependencies": {
-    "babel": "^5.5.6",
-    "babel-runtime": "^5.6.15",
+    "babel": "^5.8.19",
+    "babel-runtime": "^5.8.19",
     "basic-auth": "^1.0.3",
     "checkit": "^0.5.1",
     "child-process-promise": "^1.1.0",
