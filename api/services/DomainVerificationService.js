@@ -1,4 +1,5 @@
 import Verifier from 'ripple-domain-verifier'
+import {CronJob} from 'cron'
 
 export async function verify() {
 
@@ -32,5 +33,22 @@ export async function verify() {
         })
       }
     }
+  }
+}
+
+export async function start() {
+  try {
+    // Perform domain verification hourly
+    const job = new CronJob('0 0 * * * *', async function() {
+      try {
+        await verify()
+        console.log('Verified validator domains')
+      } catch (error) {
+        console.error('Error with validator domain verification task:', error)
+      }
+    }, null, true)
+    console.log('Started domain verification cron job')
+  } catch (error) {
+    console.error('Error starting domain verification cron job:', error)
   }
 }

@@ -8,6 +8,7 @@
     "babel-runtime": "^5.8.19",
     "basic-auth": "^1.0.3",
     "checkit": "^0.5.1",
+    "cron": "^1.0.9",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
     "grunt-cli": "^0.1.13",
