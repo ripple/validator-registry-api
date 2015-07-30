@@ -32,6 +32,16 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
+      },
+
+      // Return validator's current domain verification status
+      getVerificationStatus: async function(validation_public_key) {
+        return await database.Verifications.findOne({
+          where: {
+            validation_public_key: validation_public_key
+          },
+          order: [['"createdAt"', 'DESC']]
+        })
       }
     }
   });
