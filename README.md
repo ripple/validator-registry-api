@@ -62,6 +62,19 @@ Request parameters:
 * reporter_public_key
 * ledger_hash
 
+#### Daily Reports
+Total validations, correlation coefficients
+
+#####GET /reports
+List of latest daily reports, one report for each validator
+Response:
+* Array of Reports
+
+#####GET /reports/:validation_public_key
+List of historical daily reports for a given validator
+Response:
+* Array of Reports
+
 # Local Hacking
 
 To hack on validators-registry-api, you'll need:
