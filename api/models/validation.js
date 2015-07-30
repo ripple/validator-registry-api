@@ -38,10 +38,11 @@ module.exports = function(sequelize, DataTypes) {
 
       getValidators: function() {
         return sequelize.query(
-          'select distinct on (validation_public_key) validation_public_key from "Validations"'
+          'select validation_public_key from "Validations" group by validation_public_key;'
         ,{
           type: sequelize.QueryTypes.SELECT
         }).then(results => {
+
           return results.map(result => {
             return result.validation_public_key
           })
