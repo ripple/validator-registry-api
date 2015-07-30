@@ -8,6 +8,7 @@
     password: "{{webapp_docker_password}}"
     state: reloaded
     pull: always
+    restart_policy: always
     expose:
       - 1337
     env:
