@@ -12,13 +12,21 @@ module.exports = {
    */
   index: async function (req, res) {
 
-    let validators = await database.Validations.getValidators()
-    for (let i=0; i<validators.length; i++) {
-      let verification = await database.Verifications.getVerificationStatus(validators[i])
-      validators[i] = {
-        validation_public_key: validators[i],
-        domain: verification.domain,
-        error: verification.error
+    // Return validators with their most recent domain status
+    let verifications = await database.Verifications.findAll({
+      order: [['"createdAt"', 'DESC']]
+    })
+    let validators = []
+    let validation_public_keys = []
+    for (let verification of verifications) {
+      if (!(_.contains(validation_public_keys,
+                       verification.validation_public_key))) {
+        validators.push({
+          validation_public_key: verification.validation_public_key,
+          domain: verification.domain,
+          error: verification.error
+        })
+        validation_public_keys.push(verification.validation_public_key)
       }
     }
     return res.json({
