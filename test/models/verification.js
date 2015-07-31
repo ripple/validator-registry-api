@@ -54,7 +54,7 @@ describe('Verification', () => {
       domain: domain
     })
     .catch(err => {
-      assert.strictEqual(err.message, 'Validation error: Validation is failed')
+      assert.strictEqual(err.message, 'Validation error: Invalid validation_public_key')
       done()
     })
   })
@@ -69,7 +69,7 @@ describe('Verification', () => {
       error: error
     })
     .catch(err => {
-      assert.strictEqual(err.message, 'Validation error: Validation isIn failed')
+      assert.strictEqual(err.message, 'Validation error: Invalid error')
       done()
     })
   })
