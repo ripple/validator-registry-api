@@ -67,11 +67,11 @@ describe('CorrelationCoefficientService', () => {
     })
   })
 
-  describe('compute', () => {
+  describe('computeCorrelationCoefficient', () => {
 
     it('should calculate the correlation coefficient', async () => {
 
-      const results = await CorrelationCoefficientService.compute()
+      const results = await CorrelationCoefficientService.computeCorrelationCoefficient()
       results.forEach(result => {
 
         assert(result.validation_public_key)
@@ -100,11 +100,11 @@ describe('CorrelationCoefficientService', () => {
 
 
       alphaCluster.forEach(validator => {
-        assert.strictEqual(result.coefficients[validator], 1)
+        assert.strictEqual(result.coefficients[validator].correlation, 1)
       })
 
       otherCluster.forEach(validator => {
-        assert.strictEqual(result.coefficients[validator], 0.5)
+        assert.strictEqual(result.coefficients[validator].correlation, 0.5)
       })
     })
   })

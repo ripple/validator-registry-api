@@ -30,7 +30,7 @@ export async function storeClusterLedgers(start, end) {
   return await database.ClusterLedgers.bulkCreate(ledgers)
 }
 
-export async function compute() {
+export async function computeCorrelationCoefficient() {
 
   let start = moment().format('YYYY-MM-DD')
   let end   = moment().add(1, 'day').format('YYYY-MM-DD')
@@ -56,11 +56,13 @@ export async function compute() {
 }
 
 export async function create() {
-  let results = await compute()
+  let results = await computeCorrelationCoefficient()
 
   var coefficients = {}
   results.forEach(result => {
-    coefficients[result.validation_public_key] = result.num_validated_ledger / result.denom_validated_ledger
+    coefficients[result.validation_public_key] = {
+      correlation: result.num_validated_ledger / result.denom_validated_ledger
+    }
   })
 
   return CorrelationScore.create({

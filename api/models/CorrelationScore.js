@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       coefficients: function() {
         var coefficients = this.getDataValue('coefficients')
         Object.keys(coefficients).forEach(publicKey => {
-          coefficients[publicKey] = parseFloat(coefficients[publicKey])
+          coefficients[publicKey].correlation = parseFloat(coefficients[publicKey].correlation)
         })
         return coefficients
       }
