@@ -7,6 +7,7 @@
     "babel": "^5.8.19",
     "babel-runtime": "^5.8.19",
     "basic-auth": "^1.0.3",
+    "bluebird": "^2.9.34",
     "checkit": "^0.5.1",
     "cron": "^1.0.9",
     "ejs": "~0.8.4",
@@ -41,9 +42,11 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 15000",
+    "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 6000",
     "correlate": "grunt correlate",
-    "verify": "grunt verify"
+    "verify": "grunt verify",
+    "db:migrate": "sequelize db:migrate --url=$DATABASE_URL",
+    "db:seed": "grunt db:seed"
   },
   "main": "app.js",
   "repository": {

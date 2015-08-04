@@ -27,6 +27,9 @@ module.exports = function(sequelize, DataTypes) {
       type     : DataTypes.STRING,
       allowNull: false
     },
+    createdAt: {
+      type     : DataTypes.DATE
+    },
   }, {
     classMethods: {
       countByValidatorInLast24Hours: function() {

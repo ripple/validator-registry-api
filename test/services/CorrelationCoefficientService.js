@@ -1,6 +1,7 @@
 import 'sails-test-helper'
 import assert from 'assert'
 import moment from 'moment'
+import {SHA256} from '../utils'
 
 describe('CorrelationCoefficientService', () => {
 
@@ -113,17 +114,9 @@ describe('CorrelationCoefficientService', () => {
 function Ledgers() {
   var ledgers = []
   for (var i=0; i<10; i++) {
-    let ledger = Sha256()
+    let ledger = SHA256()
     ledgers.push(ledger)
   }
   return ledgers
-}
-
-function Sha256() {
-  return require('crypto')
-          .createHash('sha256')
-          .update(String(Math.random()))
-          .digest('hex')
-          .toUpperCase()
 }
 

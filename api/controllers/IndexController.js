@@ -14,7 +14,9 @@ module.exports = {
   index: function (req, res) {
     return res.json({
       validations: 'GET /validations',
-      validators: 'GET /validators'
+      validators: 'GET /validators',
+      latest_validations_report: 'GET /reports',
+      validator_report_history: 'GET /reports/:validation_public_key'
     });
   }
 };
