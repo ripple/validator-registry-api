@@ -65,7 +65,7 @@ export async function create() {
     }
   })
 
-  return CorrelationScore.create({
+  return database.CorrelationScores.create({
     quorum: QUORUM,
     cluster: validators,
     coefficients: coefficients,
