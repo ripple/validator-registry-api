@@ -58,99 +58,89 @@ describe('CorrelationScore database table', () => {
 
   it('should reject without a quorum provided', async done => {
 
-    try {
-      await database.CorrelationScores.create({
-        date: '1605-11-05',
-        coefficients: {
-          'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz': 0.9911,
-          'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7': 0.9888833
-        },
-        cluster: [
-          'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
-          'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
-          'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
-        ]
-      })
-    } catch(error) {
+    await database.CorrelationScores.create({
+      date: '1605-11-05',
+      coefficients: {
+        'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz': 0.9911,
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7': 0.9888833
+      },
+      cluster: [
+        'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
+        'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
+      ]
+    }).catch(error => {
       assert.strictEqual(error.message, 'notNull Violation: quorum cannot be null')
       done()
-    }
+    })
   })
 
   it('should reject without a date provided', async done => {
 
-    try {
-      await database.CorrelationScores.create({
-        quorum: 2,
-        coefficients: {
-          'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz': 0.9911,
-          'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7': 0.9888833
-        },
-        cluster: [
-          'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
-          'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
-          'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
-        ]
-      })
-    } catch(error) {
+    await database.CorrelationScores.create({
+      quorum: 2,
+      coefficients: {
+        'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz': 0.9911,
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7': 0.9888833
+      },
+      cluster: [
+        'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
+        'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
+      ]
+    }).catch(error => {
       assert.strictEqual(error.message, 'notNull Violation: date cannot be null')
       done()
-    }
+    })
   })
 
   it('should reject without coefficients provided', async done => {
 
-    try {
-      await database.CorrelationScores.create({
-        date: '1605-11-05',
-        quorum: 2,
-        cluster: [
-          'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
-          'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
-          'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
-        ]
-      })
-    } catch(error) {
+    await database.CorrelationScores.create({
+      date: '1605-11-05',
+      quorum: 2,
+      cluster: [
+        'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
+        'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
+      ]
+    }).catch(error => {
       assert.strictEqual(error.message, 'notNull Violation: coefficients cannot be null')
       done()
-    }
+    })
   })
 
   it('should reject without cluster provided', async done => {
 
-    try {
-      await database.CorrelationScores.create({
-        date: '1605-11-05',
-        quorum: 2,
-        coefficients: {
-          'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz': 0.9911,
-          'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7': 0.9888833
-        }
-      })
-    } catch(error) {
+    await database.CorrelationScores.create({
+      date: '1605-11-05',
+      quorum: 2,
+      coefficients: {
+        'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz': 0.9911,
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7': 0.9888833
+      }
+    }).catch(error => {
       assert.strictEqual(error.message, 'notNull Violation: cluster cannot be null')
       done()
-    }
+    })
   })
 
   it('should reject a quorum greater than the cluster size', async done => {
 
-    try {
-      await database.CorrelationScores.create({
-        date: '1605-11-05',
-        quorum: 5,
-        coefficients: {
-          'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz': 0.9911,
-          'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7': 0.9888833
-        },
-        cluster: [
-          'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7'
-        ]
-      })
-    } catch(error) {
+    await database.CorrelationScores.create({
+      date: '1605-11-05',
+      quorum: 5,
+      coefficients: {
+        'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz': 0.9911,
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7': 0.9888833
+      },
+      cluster: [
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7'
+      ]
+    }).catch(error => {
       assert.strictEqual(error.message, 'Validation error: quorum cannot be greater than cluster size')
       done()
-    }
+    })
   })
 
   it('should reject an invalid validation public keys', done => {

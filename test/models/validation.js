@@ -44,7 +44,20 @@ describe('Validation', () => {
       ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
     })
     .catch(err => {
-      assert.strictEqual(err.message, 'Validation error: Validation is failed')
+      assert.strictEqual(err.message, 'Validation error: Invalid validation_public_key')
+      done()
+    })
+  })
+
+  it('.create should require a valid ledger_hash',done => {
+
+    database.Validations.create({
+      validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+      reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
+      ledger_hash: 'a tribute to the greatest ledger in the world'
+    })
+    .catch(err => {
+      assert.strictEqual(err.message, 'Validation error: Invalid ledger_hash')
       done()
     })
   })

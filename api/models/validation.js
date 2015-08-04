@@ -7,12 +7,21 @@ module.exports = function(sequelize, DataTypes) {
       type     : DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /^n([rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz]){51}$/i
+        is: {
+          args: /^n([rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz]){51}$/i,
+          msg: 'Invalid validation_public_key'
+        }
       }
     },
     ledger_hash: {
       type     : DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: {
+          args: /[A-F0-9]{64}/,
+          msg: 'Invalid ledger_hash'
+        }
+      }
     },
     reporter_public_key: {
       type     : DataTypes.STRING,

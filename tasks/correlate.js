@@ -6,9 +6,9 @@ module.exports = function (done) {
   Sails.lift({}, async () => {
     var date = moment().subtract(1, 'day').format('YYYY-MM-DD')
 
-    const score = await CorrelationScore.find({ where: { date: date }})
+    const score = await database.CorrelationScores.findOne({ where: { date: date }})
 
-    if (score[0]) {
+    if (score) {
       console.error('Correlation Coefficients already computed for', date)
     } else {
       try {
