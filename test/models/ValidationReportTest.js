@@ -29,4 +29,3 @@ describe('ValidationReport model', () => {
     await database.sequelize.query('delete from "ValidationReports"')
   })
 })
-

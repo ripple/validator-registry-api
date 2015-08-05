@@ -1,3 +1,4 @@
+import {CronJob} from 'cron'
 import moment from 'moment'
 
 const DATE_FORMAT = 'YYYY-MM-DD'
@@ -60,3 +61,27 @@ export async function latest() {
   return report
 }
 
+export async function start() {
+  try {
+    // Perform daily validators report hourly
+    const job = new CronJob('0 0 * * * *', async function() {
+      try {
+        const date = moment().subtract(1, 'day').format('YYYY-MM-DD')
+
+        const score = await database.ValidationReports.findOne({ where: { date: date }})
+
+        if (score) {
+          console.error('Validators report already computed for', date)
+        } else {
+          const record = await create(date)
+          console.log('Completed validators report', record.toJSON())
+        }
+      } catch (error) {
+        console.error('Error with Correlation Coefficient task', error)
+      }
+    }, null, true)
+    console.log('Started validators report cron job')
+  } catch (error) {
+    console.error('Error starting validators report cron job:', error)
+  }
+}
