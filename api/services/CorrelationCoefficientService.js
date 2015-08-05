@@ -1,3 +1,4 @@
+import {CronJob} from 'cron'
 import moment from 'moment'
 
 const validators = [
@@ -30,10 +31,7 @@ export async function storeClusterLedgers(start, end) {
   return await database.ClusterLedgers.bulkCreate(ledgers)
 }
 
-export async function computeCorrelationCoefficient() {
-
-  let start = moment().format('YYYY-MM-DD')
-  let end   = moment().add(1, 'day').format('YYYY-MM-DD')
+export async function computeCorrelationCoefficient(start, end) {
 
   await storeClusterLedgers(start, end)
 
@@ -48,15 +46,16 @@ export async function computeCorrelationCoefficient() {
   const denom_validated_ledger = await database.ClusterLedgers.count({})
 
   return _.map(result[0], result => {
-    result.date_validated = start
     result.num_validated_ledger = parseInt(result.num_validated_ledger)
     result.denom_validated_ledger = denom_validated_ledger
     return result
   })
 }
 
-export async function create() {
-  let results = await computeCorrelationCoefficient()
+export async function create(start) {
+  const end = moment(start).add(1, 'day').format('YYYY-MM-DD')
+
+  let results = await computeCorrelationCoefficient(start, end)
 
   var coefficients = {}
   results.forEach(result => {
@@ -69,6 +68,31 @@ export async function create() {
     quorum: QUORUM,
     cluster: validators,
     coefficients: coefficients,
-    date: results[0].date_validated
+    date: start
   })
+}
+
+export async function start() {
+  try {
+    // Perform coefficient calculation hourly
+    const job = new CronJob('0 0 * * * *', async function() {
+      try {
+        const date = moment().subtract(1, 'day').format('YYYY-MM-DD')
+
+        const score = await database.CorrelationScores.findOne({ where: { date: date }})
+
+        if (score) {
+          console.error('Correlation Coefficients already computed for', date)
+        } else {
+          const record = await create(date)
+          console.log('Computed Correlation Coefficients', record.toJSON())
+        }
+      } catch (error) {
+        console.error('Error with Correlation Coefficient task', error)
+      }
+    }, null, true)
+    console.log('Started coefficient calculations cron job')
+  } catch (error) {
+    console.error('Error starting coefficient calculations cron job:', error)
+  }
 }

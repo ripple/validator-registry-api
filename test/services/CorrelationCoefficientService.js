@@ -72,11 +72,10 @@ describe('CorrelationCoefficientService', () => {
 
     it('should calculate the correlation coefficient', async () => {
 
-      const results = await CorrelationCoefficientService.computeCorrelationCoefficient()
+      const results = await CorrelationCoefficientService.computeCorrelationCoefficient(start, end)
       results.forEach(result => {
 
         assert(result.validation_public_key)
-        assert.strictEqual(result.date_validated, start)
         assert(result.denom_validated_ledger, 10)
 
         if (_.contains(alphaCluster, result.validation_public_key)) {
@@ -92,7 +91,7 @@ describe('CorrelationCoefficientService', () => {
 
     it('should persist the correlation coefficient to the database', async () => {
 
-      const result = await CorrelationCoefficientService.create()
+      const result = await CorrelationCoefficientService.create(start)
 
       assert.strictEqual(result.quorum, 3)
       assert.strictEqual(result.cluster.length, 5)
