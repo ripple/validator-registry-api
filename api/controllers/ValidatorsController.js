@@ -10,6 +10,16 @@ module.exports = {
   /**
    * `ValidatorsController.index()`
    */
+
+  /**
+   * @api {get} /validators List of all known validators
+   * @apiName listValidators
+   * @apiGroup Validators
+   *
+   * @apiSuccess {String} domain verified domain of validator if exists
+   * @apiSuccess {String} error domain verification failure step
+   * @apiSuccess {ValidationPublicKey} validation_public_key ripple validation public key
+   */
   index: async function (req, res) {
 
     // Return validators with their most recent domain status

@@ -11,9 +11,9 @@ module.exports = {
    * `ValidationReportsController.index()`
    */
   /**
-   * @api {get} /reports Request Latest Report for all Validators
+   * @api {get} /reports Latest Report for all Validators
    * @apiName latestReport
-   * @apiGroup Report
+   * @apiGroup Reports
    *
    * @apiSuccess {Json} validators public keys mapped to data report data by validator
    * @apiSuccess {Date} date date of report formatted as YYYY-MM-DD 
@@ -35,7 +35,15 @@ module.exports = {
 
   /**
    * `ValidationReportsController.show()`
-   */
+   *
+   * @api {get} /reports/:validation_public_key Historical Reports for a Validator
+   * @apiName historicalReports
+   * @apiGroup Reports
+   *
+   * @apiSuccess {ValidationPublicKey} validation_public_key Ripple validation public key
+   * @apiSuccess {Array} reports Array of Report objects with date, validations properties
+  */
+
   show: function (req, res) {
 
     let key = req.params.validation_public_key
