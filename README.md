@@ -86,8 +86,6 @@ To build the environment:
 
 ```
 $ docker-compose build
-$ docker-compose run webapp npm install
-$ docker-compose run webapp sequelize --url=postgres://postgres:postgres@postgres/postgres db:migrate
 ```
 
 To bring up the environment:
@@ -106,6 +104,14 @@ If you need a shell:
 ```
 $ docker-compose run webapp /bin/bash
 ```
+
+To run tests:
+
+```
+$ docker-compose run webapp npm test
+```
+
+NOTE: Tests truncate local db tables
 
 # Deployment to api.validators.ripple.com
 
