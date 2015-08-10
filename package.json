@@ -48,7 +48,10 @@
     "correlate": "grunt correlate",
     "verify": "grunt verify",
     "db:migrate": "sequelize db:migrate --url=$DATABASE_URL",
-    "db:seed": "grunt db:seed"
+    "db:seed": "grunt db:seed",
+    "apidoc:build": "apidoc -i api/controllers -o apidoc",
+    "apidoc:serve": "cd apidoc/ && serve",
+    "apidoc": "npm run apidoc:build && npm run apidoc:serve"
   },
   "main": "app.js",
   "repository": {
@@ -58,7 +61,9 @@
   "author": "stevenzeiler",
   "license": "",
   "devDependencies": {
+    "apidoc": "^0.13.1",
     "sails-test-helper": "^0.4.4",
-    "sequelize-cli": "^1.7.0"
+    "sequelize-cli": "^1.7.0",
+    "serve": "^1.4.0"
   }
 }
