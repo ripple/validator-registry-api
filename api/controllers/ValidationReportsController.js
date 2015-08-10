@@ -10,6 +10,14 @@ module.exports = {
   /**
    * `ValidationReportsController.index()`
    */
+  /**
+   * @api {get} /reports Request Latest Report for all Validators
+   * @apiName latestReport
+   * @apiGroup Report
+   *
+   * @apiSuccess {Json} validators public keys mapped to data report data by validator
+   * @apiSuccess {Date} date date of report formatted as YYYY-MM-DD 
+   */
   index: function (req, res) {
 
     ValidationReportService.latest().then(report => {

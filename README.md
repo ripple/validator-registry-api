@@ -4,6 +4,17 @@ Node.js server application to track and publish rippled validator performance an
 
 a [Sails](http://sailsjs.org) application
 
+## API Documentation
+
+HTTP/JSON endpoint documentation is maintained in source control using [ApiDoc](http://apidocjs.com/)
+ApiDoc annotations exist above individual controller actions in `api/controllers/`
+
+````
+npm run apidoc
+````
+
+Will generate documentation and serve it at [http://127.0.0.1:3000](http://127.0.0.1:3000)
+
 ## Migrate
 
 Add db configuration to config/config.json
