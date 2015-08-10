@@ -65,7 +65,6 @@ module.exports = {
    * @apiSuccess {Integer} validations_count total validations for validator in past 24 hours
    * @apiSuccess {ValidationPublicKey} validation_public_key rippled validation public key
   */
-   */
 
   index: function (req, res) {
 
