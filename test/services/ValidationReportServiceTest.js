@@ -78,15 +78,17 @@ describe('ValidationReportService', () => {
     })
   })
 
-  it('#compute should compute total validations per validator in a given day', async () => {
+  it('#compute should compute total unique validations per validator in a given day', async () => {
 
     const publicKey = 'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA'
-    
-    for (let i=0; i<5; i++) {
+    const duplicateLedger = SHA256()
+
+    // Store four ledgers one time and one ledger four times (five unique ledgers)
+    for (let i=0; i<8; i++) {
       await database.Validations.create({
         validation_public_key: publicKey,
         reporter_public_key: publicKey,
-        ledger_hash: SHA256()
+        ledger_hash: i % 2 ? SHA256() : duplicateLedger
       })
     }
 

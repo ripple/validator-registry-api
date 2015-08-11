@@ -41,14 +41,14 @@ export async function compute(start) {
 
   const end   = moment(start).add(1, 'day').format(DATE_FORMAT)
 
-  var query = `select sum(1), validation_public_key from "Validations" where "createdAt" > '${start}'and "createdAt" < '${end}' group by validation_public_key`
+  var query = `select count(distinct ledger_hash) validations, validation_public_key from "Validations" where "createdAt" > '${start}'and "createdAt" < '${end}' group by validation_public_key`
 
   const results = await database.sequelize.query(query)
 
   return (results => {
     var map = {}
     results.forEach(result => {
-      map[result.validation_public_key] = parseInt(result.sum)
+      map[result.validation_public_key] = parseInt(result.validations)
     })
     return map
   })(results[0])
