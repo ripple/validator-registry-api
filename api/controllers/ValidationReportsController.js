@@ -42,6 +42,8 @@ module.exports = {
    *
    * @apiSuccess {ValidationPublicKey} validation_public_key Ripple validation public key
    * @apiSuccess {Array} reports Array of Report objects with date, validations properties
+   * @apiSuccess {Date} report.date date of report formatted as YYYY-MM-DD
+   * @apiSuccess {Integer} report.validations total number of validations
   */
 
   show: function (req, res) {
