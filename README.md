@@ -4,6 +4,17 @@ Node.js server application to track and publish rippled validator performance an
 
 a [Sails](http://sailsjs.org) application
 
+## API Documentation
+
+HTTP/JSON endpoint documentation is maintained in source control using [ApiDoc](http://apidocjs.com/)
+ApiDoc annotations exist above individual controller actions in `api/controllers/`
+
+````
+npm run apidoc
+````
+
+Will generate documentation and serve it at [http://127.0.0.1:3000](http://127.0.0.1:3000)
+
 ## Migrate
 
 Add db configuration to config/config.json
@@ -34,11 +45,46 @@ If both variables are set validator-registry-api will require basic auth in orde
 ### Validators and Validations
 
 ##### GET /validators
+Response:
+* Array of Validators
+
 ##### GET /validators/:validation_public_key
+Response:
+* Validator
+  * validation_public_key
+  * domain
+  * error
+
 ##### GET /validators/:validation_public_key/validations
+Response:
+* Array of Validations
+
 ##### GET /ledgers/:ledger_hash/validations
+Response:
+* Array of Validations
+
 ##### GET /ledgers/:ledger_hash/validations/:validation_public_key
+Response:
+* Array of Validations
+
 ##### POST /validations
+Request parameters:
+* validation_public_key
+* reporter_public_key
+* ledger_hash
+
+#### Daily Reports
+Total validations, correlation coefficients
+
+#####GET /reports
+List of latest daily reports, one report for each validator
+Response:
+* Array of Reports
+
+#####GET /reports/:validation_public_key
+List of historical daily reports for a given validator
+Response:
+* Array of Reports
 
 # Local Hacking
 
@@ -51,8 +97,6 @@ To build the environment:
 
 ```
 $ docker-compose build
-$ docker-compose run webapp npm install
-$ docker-compose run webapp sequelize --url=postgres://postgres:postgres@postgres/postgres db:migrate
 ```
 
 To bring up the environment:
@@ -71,6 +115,14 @@ If you need a shell:
 ```
 $ docker-compose run webapp /bin/bash
 ```
+
+To run tests:
+
+```
+$ docker-compose run webapp npm test
+```
+
+NOTE: Tests truncate local db tables
 
 # Deployment to api.validators.ripple.com
 

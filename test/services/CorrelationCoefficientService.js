@@ -1,5 +1,7 @@
 import 'sails-test-helper'
 import assert from 'assert'
+import moment from 'moment'
+import {SHA256} from '../utils'
 
 describe('CorrelationCoefficientService', () => {
 
@@ -16,8 +18,11 @@ describe('CorrelationCoefficientService', () => {
     'n9MG8aiQxrupaCnkvTdLeEN6XGsedSdLd8NnVE9RgfaanPvrspL7'
   ]
 
-  before(async () => {
-    await database.sequelize.query('delete from "Validations"')
+  let start = moment().format('YYYY-MM-DD')
+  let end   = moment().add(1, 'day').format('YYYY-MM-DD')
+  beforeEach(async () => {
+    await database.Validations.truncate()
+    await database.ClusterLedgers.truncate()
 
     const ledgers = Ledgers()
 
@@ -44,46 +49,63 @@ describe('CorrelationCoefficientService', () => {
     }
   })
 
-  it('should calculate the correlation coefficient', done => {
+  after(async() => {
+    await database.Validations.truncate()
+  });
 
-    CorrelationCoefficientService.compute().then(results => {
+  describe('storeClusterLedgers', () => {
 
+    it('should persist the cluster ledgers to the database', async() => {
+
+      await CorrelationCoefficientService.storeClusterLedgers(start, end)
+      const ledgers = await database.ClusterLedgers.findAll({raw:true})
+      expect(ledgers).to.be.instanceof(Array)
+      expect(ledgers).to.have.length(10)
+
+      ledgers.forEach(result => {
+        assert(result.ledger_hash)
+      })
+    })
+  })
+
+  describe('computeCorrelationCoefficient', () => {
+
+    it('should calculate the correlation coefficient', async () => {
+
+      const results = await CorrelationCoefficientService.computeCorrelationCoefficient(start, end)
       results.forEach(result => {
 
         assert(result.validation_public_key)
-        assert(result.date_validated)
         assert(result.denom_validated_ledger, 10)
 
         if (_.contains(alphaCluster, result.validation_public_key)) {
           assert.strictEqual(result.num_validated_ledger, 10)
-        } else {
+        } else if (_.contains(otherCluster, result.validation_public_key)) {
           assert.strictEqual(result.num_validated_ledger, 5)
-        }
+        } else { assert(0) }
       })
-
-      done()
-    })
-    .catch(error => {
-      console.log('ERROR', error)
     })
   })
 
-  it('should persist the correlation coefficient to the database', async () => {
+  describe('create', () => {
 
-    const result = await CorrelationCoefficientService.create()
+    it('should persist the correlation coefficient to the database', async () => {
 
-    assert.strictEqual(result.quorum, 3)
-    assert.strictEqual(result.cluster.length, 5)
-    assert(result.createdAt)
-    assert(result.updatedAt)
+      const result = await CorrelationCoefficientService.create(start)
+
+      assert.strictEqual(result.quorum, 3)
+      assert.strictEqual(result.cluster.length, 5)
+      assert(result.createdAt)
+      assert(result.updatedAt)
 
 
-    alphaCluster.forEach(validator => {
-      assert.strictEqual(result.coefficients[validator], 1)
-    })
+      alphaCluster.forEach(validator => {
+        assert.strictEqual(result.coefficients[validator].correlation, 1)
+      })
 
-    otherCluster.forEach(validator => {
-      assert.strictEqual(result.coefficients[validator], 0.5)
+      otherCluster.forEach(validator => {
+        assert.strictEqual(result.coefficients[validator].correlation, 0.5)
+      })
     })
   })
 })
@@ -91,17 +113,9 @@ describe('CorrelationCoefficientService', () => {
 function Ledgers() {
   var ledgers = []
   for (var i=0; i<10; i++) {
-    let ledger = Sha256()
+    let ledger = SHA256()
     ledgers.push(ledger)
   }
   return ledgers
-}
-
-function Sha256() {
-  return require('crypto')
-          .createHash('sha256')
-          .update(String(Math.random()))
-          .digest('hex')
-          .toUpperCase()
 }
 

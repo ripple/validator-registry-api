@@ -7,7 +7,9 @@
     "babel": "^5.8.19",
     "babel-runtime": "^5.8.19",
     "basic-auth": "^1.0.3",
+    "bluebird": "^2.9.34",
     "checkit": "^0.5.1",
+    "cron": "^1.0.9",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
     "grunt-cli": "^0.1.13",
@@ -29,7 +31,7 @@
     "pg": "^4.4.0",
     "pg-hstore": "^2.3.2",
     "rc": "~0.5.0",
-    "ripple-domain-verifier": "^0.1.4",
+    "ripple-domain-verifier": "^0.1.5",
     "sails": "~0.11.0",
     "sails-disk": "~0.10.0",
     "sequelize": "^3.3.2"
@@ -39,10 +41,17 @@
   },
   "scripts": {
     "debug": "node debug app.js",
+    "prestart": "sequelize db:migrate --url=$DATABASE_URL",
     "start": "node app.js",
-    "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 15000",
+    "pretest": "sequelize db:migrate --url=$DATABASE_URL",
+    "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 6000",
     "correlate": "grunt correlate",
-    "verify": "grunt verify"
+    "verify": "grunt verify",
+    "db:migrate": "sequelize db:migrate --url=$DATABASE_URL",
+    "db:seed": "grunt db:seed",
+    "apidoc:build": "apidoc -i api/controllers -o apidoc",
+    "apidoc:serve": "cd apidoc/ && serve",
+    "apidoc": "npm run apidoc:build && npm run apidoc:serve"
   },
   "main": "app.js",
   "repository": {
@@ -52,7 +61,9 @@
   "author": "stevenzeiler",
   "license": "",
   "devDependencies": {
+    "apidoc": "^0.13.1",
     "sails-test-helper": "^0.4.4",
-    "sequelize-cli": "^1.7.0"
+    "sequelize-cli": "^1.7.0",
+    "serve": "^1.4.0"
   }
 }
