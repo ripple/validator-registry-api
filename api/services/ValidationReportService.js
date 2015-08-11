@@ -5,7 +5,9 @@ const DATE_FORMAT = 'YYYY-MM-DD'
 
 export async function historyForValidator(validationPublicKey) {
 
-  const reports = await database.ValidationReports.findAll()
+  const reports = await database.ValidationReports.findAll({
+    order: 'date DESC'
+  })
 
   const relevantReports = _.filter(reports, report => {
     return _.has(report.validators, validationPublicKey)

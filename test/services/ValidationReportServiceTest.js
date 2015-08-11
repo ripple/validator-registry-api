@@ -35,7 +35,7 @@ describe('ValidationReportService', () => {
     assert(report.validators)
   })
 
-  it('#historyForValidator should return all reports for validator', async () => {
+  it('#historyForValidator should return all reports for validator ordered by date', async () => {
     await database.sequelize.query('delete from "ValidationReports"')
 
     const day1 = moment().subtract(1, 'day')
@@ -67,12 +67,13 @@ describe('ValidationReportService', () => {
     }
 
     await ValidationReportService.create(day1.format('YYYY-MM-DD'))
-    await ValidationReportService.create(day2.format('YYYY-MM-DD'))
     await ValidationReportService.create(day3.format('YYYY-MM-DD'))
+    await ValidationReportService.create(day2.format('YYYY-MM-DD'))
 
     const reports = await ValidationReportService.historyForValidator(publicKey1)
 
     assert.strictEqual(reports.length, 3)
+    assert(reports[0].date > reports[1].date && reports[1].date > reports[2].date)
     reports.forEach(report => {
       assert.strictEqual(report.validations, 3)
     })
