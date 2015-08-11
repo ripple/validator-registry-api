@@ -12,11 +12,10 @@
   vars_files:
     - private/webapp-{{deploy_environment}}.yml
   pre_tasks:
-    - name: Ensure packages are installed
-      yum: name={{item}} state=latest
-      with_items:
-        - docker
-        - docker-python
+    - name: Ensure docker is installed
+      yum: name=docker state=latest
+    - name: Ensure docker-py is installed
+      yum: name=docker-python-1.0.0-53.el7.x86_64
     - name: Ensure docker is running and enabled
       service: name=docker state=started enabled=true
     - name: Ensure config directory is created
