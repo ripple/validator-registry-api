@@ -13,7 +13,7 @@ ApiDoc annotations exist above individual controller actions in `api/controllers
 npm run apidoc:build
 ````
 
-Will generate documentation in the /assets directory
+Will update documentation in the /assets directory
 
 ## Migrate
 
