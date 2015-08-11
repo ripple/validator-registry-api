@@ -6,17 +6,30 @@ const DATE_FORMAT = 'YYYY-MM-DD'
 export async function historyForValidator(validationPublicKey) {
 
   const reports = await database.ValidationReports.findAll({
-    order: 'date DESC'
+    order: 'date DESC',
+    raw: true
   })
 
   const relevantReports = _.filter(reports, report => {
     return _.has(report.validators, validationPublicKey)
   })
 
+  const scores = await database.CorrelationScores.findAll({
+    where: {
+      date: {
+        in: _.pluck(relevantReports, 'date')
+      }
+    },
+    raw: true
+  })
+
   const history = _.map(relevantReports, report => {
     return {
       date: report.date,
-      validations: report.validators[validationPublicKey]
+      validations: report.validators[validationPublicKey],
+      correlation_coefficient: _.find(scores, score => {
+        return score.date === report.date
+      }).coefficients[validationPublicKey]
     }
   })
 
@@ -71,7 +84,7 @@ export async function latest() {
   _.forEach(report.validators, (validations, validator)=>{
     report.validators[validator] = {
       validations: validations,
-      correlation: scores.coefficients[validator]
+      correlation_coefficient: scores.coefficients[validator]
     }
   })
   return report

@@ -44,6 +44,7 @@ module.exports = {
    * @apiSuccess {Array} reports Array of Report objects with date, validations properties
    * @apiSuccess {Date} report.date date of report formatted as YYYY-MM-DD
    * @apiSuccess {Integer} report.validations total number of validations
+   * @apiSuccess {Integer} report.correlation_coefficient percentage of cluster validations validated by validator
   */
 
   show: function (req, res) {
