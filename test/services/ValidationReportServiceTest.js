@@ -9,13 +9,15 @@ describe('ValidationReportService', () => {
   const publicKey2 = 'n9Ljaq2jmBnk1qnuyTdv2DpvoTbbLE8sqXGwvPRQdVk5UAFiBnDM'
 
   beforeEach(async () => {
-    await database.sequelize.query('delete from "Validations"')
-    await database.sequelize.query('delete from "ValidationReports"')
+    await database.Validations.truncate()
+    await database.ValidationReports.truncate()
+    await database.CorrelationScores.truncate()
   })
 
   after(async () => {
-    await database.sequelize.query('delete from "Validations"')
-    await database.sequelize.query('delete from "ValidationReports"')
+    await database.Validations.truncate()
+    await database.ValidationReports.truncate()
+    await database.CorrelationScores.truncate()
   })
 
   it('#latest should return the lastest report', async () => {
@@ -29,10 +31,23 @@ describe('ValidationReportService', () => {
     })
     await ValidationReportService.create(day.format('YYYY-MM-DD'))
 
+    await database.CorrelationScores.create({
+      date: day.format('YYYY-MM-DD'),
+      quorum: 2,
+      cluster: [
+        'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
+      ],
+      coefficients: {
+        'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA': 0.1,
+      }
+    })
+
     const report = await ValidationReportService.latest()
 
-    assert(report.date)
-    assert(report.validators)
+    assert.strictEqual(report.date, day.format('YYYY-MM-DD'))
+    assert.strictEqual(report.validators[publicKey1].validations, 1)
+    assert.strictEqual(report.validators[publicKey1].correlation, .1)
   })
 
   it('#historyForValidator should return all reports for validator ordered by date', async () => {

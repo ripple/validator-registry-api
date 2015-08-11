@@ -58,8 +58,22 @@ export async function compute(start) {
 
 export async function latest() {
 
-  const report = await database.ValidationReports.findOne({ order: '"createdAt" DESC' })
-
+  const report = await database.ValidationReports.findOne({
+    order: 'date DESC',
+    raw: true
+  })
+  const scores = await database.CorrelationScores.findOne({
+    where: {
+      date: report.date
+    },
+    raw: true
+  })
+  _.forEach(report.validators, (validations, validator)=>{
+    report.validators[validator] = {
+      validations: validations,
+      correlation: scores.coefficients[validator]
+    }
+  })
   return report
 }
 

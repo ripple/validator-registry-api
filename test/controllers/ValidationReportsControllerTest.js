@@ -6,11 +6,15 @@ import {SHA256} from '../utils'
 describe('ValidationReportsController', () => {
 
   beforeEach(async () => {
-    await database.sequelize.query('delete from "ValidationReports"')
+    await database.Validations.truncate()
+    await database.ValidationReports.truncate()
+    await database.CorrelationScores.truncate()
   })
 
   after(async () => {
-    await database.sequelize.query('delete from "ValidationReports"')
+    await database.Validations.truncate()
+    await database.ValidationReports.truncate()
+    await database.CorrelationScores.truncate()
   })
 
   it('#index should return the latest daily report', async (done) => {
@@ -25,12 +29,25 @@ describe('ValidationReportsController', () => {
     })
     await ValidationReportService.create(day.format('YYYY-MM-DD'))
 
+    await database.CorrelationScores.create({
+      date: day.format('YYYY-MM-DD'),
+      quorum: 2,
+      cluster: [
+        'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+        'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
+      ],
+      coefficients: {
+        'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA': 0.1,
+      }
+    })
+
     request
       .get('/reports')
       .expect(200)
       .end((error, response) => {
-        assert(response.body.report.date)
-        assert(response.body.report.validators)
+        assert.strictEqual(response.body.report.date, day.format('YYYY-MM-DD'))
+        assert.strictEqual(response.body.report.validators[publicKey].validations, 1)
+        assert.strictEqual(response.body.report.validators[publicKey].correlation, .1)
         done()
       })
   })
