@@ -22,11 +22,6 @@
 
 module.exports.routes = {
 
-  '/': {
-    controller: 'index',
-    action: 'index'
-  },
-
   '/validators': {
     controller: 'validators',
     action: 'index'
