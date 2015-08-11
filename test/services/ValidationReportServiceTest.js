@@ -5,123 +5,100 @@ import moment from 'moment'
 
 describe('ValidationReportService', () => {
 
-  const publicKey1 = 'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA'
-  const publicKey2 = 'n9Ljaq2jmBnk1qnuyTdv2DpvoTbbLE8sqXGwvPRQdVk5UAFiBnDM'
+  const publicKey = 'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA'
+
+  const date = moment().subtract(1, 'days').format('YYYY-MM-DD')
 
   beforeEach(async () => {
-    await database.sequelize.query('delete from "Validations"')
-    await database.sequelize.query('delete from "ValidationReports"')
+    await database.Validations.truncate()
+    await database.ValidationReports.truncate()
+    await database.CorrelationScores.truncate()
+
+    const days = [
+      moment().subtract(1, 'days'),
+      moment().subtract(2, 'days'),
+      moment().subtract(3, 'days')
+    ]
+
+    for (let i=0; i<3; i++) {
+      for (let j=0; j<3; j++) {
+        await database.Validations.create({
+          validation_public_key: publicKey,
+          reporter_public_key: publicKey,
+          ledger_hash: SHA256(),
+          createdAt: days[i].toDate()
+        })
+      }
+      const duplicateLedger = SHA256()
+      for (let j=0; j<3; j++) {
+        await database.Validations.create({
+          validation_public_key: publicKey,
+          reporter_public_key: publicKey,
+          ledger_hash: duplicateLedger,
+          createdAt: days[i].toDate()
+        })
+      }
+      await database.CorrelationScores.create({
+        date: days[i].format('YYYY-MM-DD'),
+        quorum: 2,
+        cluster: [
+          'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+          'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
+        ],
+        coefficients: {
+          'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA': (i+1) * 0.1,
+        }
+      })
+    }
+
+    await ValidationReportService.create(days[1].format('YYYY-MM-DD'))
+    await ValidationReportService.create(days[2].format('YYYY-MM-DD'))
   })
 
   after(async () => {
-    await database.sequelize.query('delete from "Validations"')
-    await database.sequelize.query('delete from "ValidationReports"')
+    await database.Validations.truncate()
+    await database.ValidationReports.truncate()
+    await database.CorrelationScores.truncate()
   })
 
   it('#latest should return the lastest report', async () => {
-    const day = moment()
 
-    let validation = await database.Validations.create({
-      validation_public_key: publicKey1,
-      reporter_public_key: publicKey1,
-      ledger_hash: SHA256(),
-      createdAt: day.toDate()
-    })
-    await ValidationReportService.create(day.format('YYYY-MM-DD'))
+    await ValidationReportService.create(date)
 
     const report = await ValidationReportService.latest()
 
-    assert(report.date)
-    assert(report.validators)
+    assert.strictEqual(report.date, date)
+    assert.strictEqual(report.validators[publicKey].validations, 4)
+    assert.strictEqual(report.validators[publicKey].correlation_coefficient, .1)
   })
 
-  it('#historyForValidator should return all reports for validator', async () => {
-    await database.sequelize.query('delete from "ValidationReports"')
+  it('#historyForValidator should return all reports for validator ordered by date', async () => {
 
-    const day1 = moment().subtract(1, 'day')
-    const day2 = moment().subtract(2, 'days')
-    const day3 = moment().subtract(3, 'days')
+    await ValidationReportService.create(date)
 
-    for (let i=0; i<3; i++) {
-      let validation = await database.Validations.create({
-        validation_public_key: publicKey1,
-        reporter_public_key: publicKey1,
-        ledger_hash: SHA256(),
-        createdAt: day1.toDate()
-      })
-      // await validation.updateAttributes({ createdAt: day1 })
-      validation = await database.Validations.create({
-        validation_public_key: publicKey1,
-        reporter_public_key: publicKey1,
-        ledger_hash: SHA256(),
-        createdAt: day2.toDate()
-      })
-      // await validation.updateAttributes({ createdAt: day2 })
-      validation = await database.Validations.create({
-        validation_public_key: publicKey1,
-        reporter_public_key: publicKey1,
-        ledger_hash: SHA256(),
-        createdAt: day3.toDate()
-      })
-      // await validation.updateAttributes({ createdAt: day3 })
-    }
-
-    await ValidationReportService.create(day1.format('YYYY-MM-DD'))
-    await ValidationReportService.create(day2.format('YYYY-MM-DD'))
-    await ValidationReportService.create(day3.format('YYYY-MM-DD'))
-
-    const reports = await ValidationReportService.historyForValidator(publicKey1)
+    const reports = await ValidationReportService.historyForValidator(publicKey)
 
     assert.strictEqual(reports.length, 3)
-    reports.forEach(report => {
-      assert.strictEqual(report.validations, 3)
-    })
+    assert(reports[0].date > reports[1].date && reports[1].date > reports[2].date)
+    for (let i=0; i<3; i++) {
+      assert.strictEqual(reports[i].validations, 4)
+      assert.strictEqual(reports[i].correlation_coefficient, (i+1) * 0.1)
+    }
   })
 
-  it('#compute should compute total validations per validator in a given day', async () => {
+  it('#compute should compute total unique validations per validator in a given day', async () => {
 
-    const publicKey = 'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA'
-    
-    for (let i=0; i<5; i++) {
-      await database.Validations.create({
-        validation_public_key: publicKey,
-        reporter_public_key: publicKey,
-        ledger_hash: SHA256()
-      })
-    }
-
-    const result = await ValidationReportService.compute(moment().format('YYYY-MM-DD'))
-    assert.strictEqual(result[publicKey], 5)
+    const result = await ValidationReportService.compute(date)
+    assert.strictEqual(result[publicKey], 4)
   })
 
   it('#create should compute and store total validations per validator in a given day', async () => {
-
-    const date = moment().format('YYYY-MM-DD')
-    
-    for (let i=0; i<5; i++) {
-      await database.Validations.create({
-        validation_public_key: publicKey1,
-        reporter_public_key: publicKey1,
-        ledger_hash: SHA256()
-      })
-      await database.Validations.create({
-        validation_public_key: publicKey2,
-        reporter_public_key: publicKey2,
-        ledger_hash: SHA256()
-      })
-      await database.Validations.create({
-        validation_public_key: publicKey2,
-        reporter_public_key: publicKey2,
-        ledger_hash: SHA256()
-      })
-    }
 
     const record = await ValidationReportService.create(date)
 
     assert(record.id)
     assert.strictEqual(record.date, date)
-    assert.strictEqual(record.validators[publicKey1], 5)
-    assert.strictEqual(record.validators[publicKey2], 10)
+    assert.strictEqual(record.validators[publicKey], 4)
   })
 })
 
