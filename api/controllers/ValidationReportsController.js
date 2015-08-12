@@ -15,8 +15,11 @@ module.exports = {
    * @apiName latestReport
    * @apiGroup Reports
    *
-   * @apiSuccess {Json} validators public keys mapped to data report data by validator
    * @apiSuccess {Date} date date of report formatted as YYYY-MM-DD 
+   * @apiSuccess {Json} validators map of public keys with validator-specific data
+   * @apiSuccess {Integer} validators.validations total validations for the validator
+   * @apiSuccess {Integer} validators.correlation_coefficient correlation score for the validator
+   * @apiSuccess {Integer} validators.divergence_coefficient divergence score for the validator
    */
   index: function (req, res) {
 
