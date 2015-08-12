@@ -38,55 +38,11 @@ To require basic http authentication set the following environment variables:
 
 If both variables are set validator-registry-api will require basic auth in order to POST to /validations
 
-## HTML Pages
+## API Documentation
 
-##### GET /
+(https://api-staging.validators.ripple.com)[https://api-staging.validators.ripple.com]
 
-### Validators and Validations
-
-##### GET /validators
-Response:
-* Array of Validators
-
-##### GET /validators/:validation_public_key
-Response:
-* Validator
-  * validation_public_key
-  * domain
-  * error
-
-##### GET /validators/:validation_public_key/validations
-Response:
-* Array of Validations
-
-##### GET /ledgers/:ledger_hash/validations
-Response:
-* Array of Validations
-
-##### GET /ledgers/:ledger_hash/validations/:validation_public_key
-Response:
-* Array of Validations
-
-##### POST /validations
-Request parameters:
-* validation_public_key
-* reporter_public_key
-* ledger_hash
-
-#### Daily Reports
-Total validations, correlation coefficients
-
-#####GET /reports
-List of latest daily reports, one report for each validator
-Response:
-* Array of Reports
-
-#####GET /reports/:validation_public_key
-List of historical daily reports for a given validator
-Response:
-* Array of Reports
-
-# Local Hacking
+# Local Development
 
 To hack on validators-registry-api, you'll need:
 
@@ -127,3 +83,4 @@ NOTE: Tests truncate local db tables
 # Deployment to api.validators.ripple.com
 
 Check the README in the ansible/ directory
+
