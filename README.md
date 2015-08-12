@@ -10,10 +10,10 @@ HTTP/JSON endpoint documentation is maintained in source control using [ApiDoc](
 ApiDoc annotations exist above individual controller actions in `api/controllers/`
 
 ````
-npm run apidoc
+npm run apidoc:build
 ````
 
-Will generate documentation and serve it at [http://127.0.0.1:3000](http://127.0.0.1:3000)
+Will update documentation in the /assets directory
 
 ## Migrate
 
