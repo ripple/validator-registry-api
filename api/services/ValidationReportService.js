@@ -24,12 +24,15 @@ export async function historyForValidator(validationPublicKey) {
   })
 
   const history = _.map(relevantReports, report => {
+    const score = _.find(scores, score => {
+      return score.date === report.date
+    })
+    let correlation_coefficient = score && score.coefficients[validationPublicKey] ?
+      score.coefficients[validationPublicKey].correlation : null
     return {
       date: report.date,
       validations: report.validators[validationPublicKey],
-      correlation_coefficient: _.find(scores, score => {
-        return score.date === report.date
-      }).coefficients[validationPublicKey]
+      correlation_coefficient: correlation_coefficient
     }
   })
 
@@ -84,7 +87,8 @@ export async function latest() {
   _.forEach(report.validators, (validations, validator)=>{
     report.validators[validator] = {
       validations: validations,
-      correlation_coefficient: scores.coefficients[validator]
+      correlation_coefficient: scores && scores.coefficients[validator] ?
+        scores.coefficients[validator].correlation : null
     }
   })
   return report
