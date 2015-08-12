@@ -32,22 +32,6 @@ module.exports = function(sequelize, DataTypes) {
     },
   }, {
     classMethods: {
-      countByValidatorInLast24Hours: function() {
-        return sequelize.query(
-          'select sum(1), validation_public_key from "Validations" where "createdAt" > ? group by validation_public_key'
-        ,{
-          replacements: [moment().subtract(1, 'days').toDate()],
-          type: sequelize.QueryTypes.SELECT
-        }).then(results => {
-          return results.map(result => {
-            return {
-              validations_count: parseInt(result.sum),
-              validation_public_key: result.validation_public_key
-            }
-          })
-        })
-      },
-
       getValidators: function() {
         return sequelize.query(
           'select validation_public_key from "Validations" group by validation_public_key;'
@@ -60,7 +44,6 @@ module.exports = function(sequelize, DataTypes) {
           })
         })
       },
-
       associate: function(models) {
         // associations can be defined here
       }
