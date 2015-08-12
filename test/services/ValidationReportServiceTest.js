@@ -46,7 +46,9 @@ describe('ValidationReportService', () => {
           'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
         ],
         coefficients: {
-          'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA': (i+1) * 0.1,
+          'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA': {
+            correlation: (i+1) * 0.1
+          }
         }
       })
     }
