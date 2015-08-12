@@ -3,16 +3,12 @@ import 'sails-test-helper'
 
 describe('ClusterLedgers', () => {
 
-  beforeEach(function(done) {
-    database.ClusterLedgers.truncate().then(() => {
-      done();
-    });
+  beforeEach(async() => {
+    await database.ClusterLedgers.truncate()
   });
 
-  after(function(done) {
-    database.ClusterLedgers.truncate().then(() => {
-      done();
-    });
+  after(async() => {
+    await database.ClusterLedgers.truncate()
   });
 
   it('.create should persist to the database',async() => {
