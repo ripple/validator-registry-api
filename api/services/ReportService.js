@@ -95,8 +95,31 @@ export async function create(start) {
   return report
 }
 
+export async function fillHistory() {
+
+  var query = 'select distinct "createdAt"::date from "Validations"'
+  const validation_dates = await database.sequelize.query(query, {
+    type: database.sequelize.QueryTypes.SELECT,
+    raw: true
+  })
+
+  for (let validation_date of validation_dates) {
+    const date = moment(validation_date.createdAt).format('YYYY-MM-DD')
+    if (date!==moment().format('YYYY-MM-DD') && !await database.Reports.findOne({
+      where: {
+        date: date
+      }
+    })) {
+      await create(date)
+    }
+  }
+}
+
 export async function start() {
   try {
+    // Fill report history
+    await fillHistory()
+
     // Perform daily report hourly
     const job = new CronJob('0 0 * * * *', async function() {
       try {

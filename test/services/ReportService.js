@@ -18,7 +18,13 @@ describe('ReportService', () => {
     'n9MG8aiQxrupaCnkvTdLeEN6XGsedSdLd8NnVE9RgfaanPvrspL7'
   ]
 
-  const start = moment().format('YYYY-MM-DD')
+  const days = [
+    moment(),
+    moment().subtract(1, 'days'),
+    moment().subtract(2, 'days')
+  ]
+
+  const start = days[0].format('YYYY-MM-DD')
 
   beforeEach(async () => {
     await database.Validations.truncate()
@@ -26,37 +32,43 @@ describe('ReportService', () => {
     await database.ReportEntries.truncate()
     await database.Reports.truncate({cascade: true})
 
-    const ledgers = Ledgers()
+    for (let i=0; i<3; i++) {
+      const ledgers = Ledgers()
 
-    for (let ledgerHash of ledgers) {
+      for (let ledgerHash of ledgers) {
 
-      for (let validator of alphaCluster) {
-        await database.Validations.create({
-          ledger_hash: ledgerHash,
-          validation_public_key: validator,
-          reporter_public_key: validator
-        })
-        await database.Validations.create({
-          ledger_hash: SHA256(),
-          validation_public_key: validator,
-          reporter_public_key: validator
-        })
-      }
-
-      for (let validator of otherCluster) {
-
-        if (ledgers.indexOf(ledgerHash) % 2 === 0) {
+        for (let validator of alphaCluster) {
           await database.Validations.create({
             ledger_hash: ledgerHash,
             validation_public_key: validator,
-            reporter_public_key: validator
+            reporter_public_key: validator,
+            createdAt: days[i].toDate()
           })
-        } else {
           await database.Validations.create({
             ledger_hash: SHA256(),
             validation_public_key: validator,
-            reporter_public_key: validator
+            reporter_public_key: validator,
+            createdAt: days[i].toDate()
           })
+        }
+
+        for (let validator of otherCluster) {
+
+          if (ledgers.indexOf(ledgerHash) % 2 === 0) {
+            await database.Validations.create({
+              ledger_hash: ledgerHash,
+              validation_public_key: validator,
+              reporter_public_key: validator,
+              createdAt: days[i].toDate()
+            })
+          } else {
+            await database.Validations.create({
+              ledger_hash: SHA256(),
+              validation_public_key: validator,
+              reporter_public_key: validator,
+              createdAt: days[i].toDate()
+            })
+          }
         }
       }
     }
@@ -197,6 +209,24 @@ describe('ReportService', () => {
 
       const db_cluster_ledgers = await database.ClusterLedgers.findAll()
       assert.strictEqual(db_cluster_ledgers.length, 10)
+    })
+  })
+
+  describe('fillHistory', () => {
+
+    it('should create reports for past days with validations', async () => {
+
+      await ReportService.fillHistory()
+
+      const reports = await database.Reports.findAll({
+        raw: true
+      })
+      assert.strictEqual(reports.length, 2)
+      for (let i=1; i<3; i++) {
+        assert(_.find(reports, report => {
+          return report.date = days[i].format('YYYY-MM-DD')
+        }))
+      }
     })
   })
 })
