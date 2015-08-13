@@ -45,7 +45,6 @@
     "start": "node app.js",
     "pretest": "sequelize db:migrate --url=$DATABASE_URL",
     "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 6000",
-    "correlate": "grunt correlate",
     "verify": "grunt verify",
     "db:migrate": "sequelize db:migrate --url=$DATABASE_URL",
     "db:seed": "grunt db:seed",
