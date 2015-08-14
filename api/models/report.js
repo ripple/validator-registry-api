@@ -3,7 +3,7 @@
 const validationPublicKeyRegex = /^n([rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz]){51}$/i
 
 module.exports = (sequelize, DataTypes) => {
-  const CorrelationScores = sequelize.define('CorrelationScores', {
+  const Reports = sequelize.define('Reports', {
     cluster: {
       type     : DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
@@ -11,15 +11,11 @@ module.exports = (sequelize, DataTypes) => {
         areValidationPublicKeys: (cluster) => {
           cluster.forEach(validationPublicKey => {
             if (!validationPublicKey.match(validationPublicKeyRegex)) {
-              throw new Error('only ripple validation public keys allowed')
+              throw new Error('Invalid validation_public_key')
             }
           })
         }
       }
-    },
-    coefficients: {
-      type     : DataTypes.JSON,
-      allowNull: false
     },
     date: {
       type     : DataTypes.STRING,
@@ -31,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     quorum: {
+      type     : DataTypes.INTEGER,
+      allowNull: false
+    },
+    cluster_validations: {
       type     : DataTypes.INTEGER,
       allowNull: false
     }
@@ -45,20 +45,11 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    getterMethods: {
-      coefficients: function() {
-        var coefficients = this.getDataValue('coefficients')
-        Object.keys(coefficients).forEach(publicKey => {
-          coefficients[publicKey].correlation = parseFloat(coefficients[publicKey].correlation)
-        })
-        return coefficients
-      }
-    },
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+        Reports.hasMany(models.ReportEntries, {foreignKey: 'report_id', as: 'entries'})
       }
     }
   });
-  return CorrelationScores;
+  return Reports;
 };
