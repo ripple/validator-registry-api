@@ -5,7 +5,7 @@
   user: ec2-user
   vars:
     nginx_config: "/opt/validators.ripple.com/nginx.conf"
-    nginx_topsubdomain_ssl_key: "/opt/validators.ripple.coma/topsubdomain-server.key"
+    nginx_topsubdomain_ssl_key: "/opt/validators.ripple.com/topsubdomain-server.key"
     nginx_topsubdomain_ssl_cert: "/opt/validators.ripple.com/topsubdomain-server.crt"
     nginx_lowersubdomains_ssl_key: "/opt/validators.ripple.com/lowersubdomains-server.key"
     nginx_lowersubdomains_ssl_cert: "/opt/validators.ripple.com/lowersubdomains-server.crt"
