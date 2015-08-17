@@ -10,5 +10,7 @@
       - "80:80"
     volumes:
       - "{{nginx_config}}:/etc/nginx/conf.d/validators.ripple.com.conf:ro"
-      - "{{nginx_ssl_key}}:/etc/nginx/ssl/server.key:ro"
-      - "{{nginx_ssl_cert}}:/etc/nginx/ssl/server.crt:ro"
+      - "{{nginx_topsubdomain_ssl_key}}:/etc/nginx/ssl/topsubdomain/server.key:ro"
+      - "{{nginx_topsubdomain_ssl_cert}}:/etc/nginx/ssl/topsubdomain/server.crt:ro"
+      - "{{nginx_lowersubdomains_ssl_key}}:/etc/nginx/ssl/lowersubdomains/server.key:ro"
+      - "{{nginx_lowersubdomains_ssl_cert}}:/etc/nginx/ssl/lowersubdomains/server.crt:ro"

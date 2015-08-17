@@ -27,24 +27,19 @@ module.exports.routes = {
     action: 'index'
   },
 
-  'GET /validations': {
-    controller: 'validations',
-    action: 'index'
-  },
-
   'POST /validations': {
     controller: 'validations',
     action: 'create'
   },
 
-  'GET /reports': {
-    controller: 'ValidationReports',
-    action: 'index'
+  'GET /reports/:date': {
+    controller: 'reports',
+    action: 'show'
   },
 
-  'GET /reports/:validation_public_key': {
-    controller: 'ValidationReports',
-    action: 'show'
+  'GET /validators/:validation_public_key/reports': {
+    controller: 'reports',
+    action: 'indexByValidator'
   },
 
   '/validators/:validation_public_key': {

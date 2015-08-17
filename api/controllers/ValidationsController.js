@@ -54,29 +54,6 @@ module.exports = {
   },
 
   /**
-   * `ValidationsController.inReportsdex()`
-   */
-
-  /**
-   * @api {get} /validations 
-   * @apiName listValidations
-   * @apiGroup Validations
-   *
-   * @apiSuccess {Integer} validations_count total validations for validator in past 24 hours
-   * @apiSuccess {ValidationPublicKey} validation_public_key rippled validation public key
-  */
-
-  index: function (req, res) {
-
-    database.Validations.countByValidatorInLast24Hours() 
-      .then(validations => { 
-        res.status(200).json({ 
-          validations: validations 
-        }) 
-      })
-  },
-
-  /**
    * `ValidationsController.indexByLedger()`
    */
   indexByLedger: function (req, res) {

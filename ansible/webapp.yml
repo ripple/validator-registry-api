@@ -5,8 +5,10 @@
   user: ec2-user
   vars:
     nginx_config: "/opt/validators.ripple.com/nginx.conf"
-    nginx_ssl_key: "/opt/validators.ripple.com/server.key"
-    nginx_ssl_cert: "/opt/validators.ripple.com/server.crt"
+    nginx_topsubdomain_ssl_key: "/opt/validators.ripple.com/topsubdomain-server.key"
+    nginx_topsubdomain_ssl_cert: "/opt/validators.ripple.com/topsubdomain-server.crt"
+    nginx_lowersubdomains_ssl_key: "/opt/validators.ripple.com/lowersubdomains-server.key"
+    nginx_lowersubdomains_ssl_cert: "/opt/validators.ripple.com/lowersubdomains-server.crt"
     nginx_dh_params: "/opt/validators.ripple.com/dhparam.pem"
     nginx_webui_root: "/opt/validators.ripple.com/webui"
   vars_files:
@@ -27,11 +29,19 @@
       notify:
         - reload nginx container
     - name: Install SSL key
-      copy: src=private/validators.ripple.com.key dest={{nginx_ssl_key}}
+      copy: src=private/topsubdomain-validators.ripple.com.key dest={{nginx_topsubdomain_ssl_key}}
       notify:
         - reload nginx container
     - name: Install SSL cert
-      copy: src=private/validators.ripple.com.crt dest={{nginx_ssl_cert}}
+      copy: src=private/topsubdomain-validators.ripple.com.crt dest={{nginx_topsubdomain_ssl_cert}}
+      notify:
+        - reload nginx container
+    - name: Install SSL key
+      copy: src=private/lowersubdomains-validators.ripple.com.key dest={{nginx_lowersubdomains_ssl_key}}
+      notify:
+        - reload nginx container
+    - name: Install SSL cert
+      copy: src=private/lowersubdomains-validators.ripple.com.crt dest={{nginx_lowersubdomains_ssl_cert}}
       notify:
         - reload nginx container
     - name: Install DH parameters

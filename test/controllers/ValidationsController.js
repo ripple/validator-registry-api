@@ -129,20 +129,5 @@ describe('ValidationsController', () => {
         })
     })
   })
-
-  describe('GET /validations', () => {
-
-    it('.index should display validations count and public key', done => {
-      request.get('/validations')
-        .expect(200)
-        .end((err, resp) => {
-          resp.body.validations.forEach(validation => {
-            assert(validation.validator_public_key)
-            assert(validation.validations_count)
-          })
-          done()
-        })
-    })
-  })
 })
 
