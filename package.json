@@ -34,7 +34,9 @@
     "ripple-domain-verifier": "^0.1.5",
     "sails": "~0.11.0",
     "sails-disk": "~0.10.0",
-    "sequelize": "^3.3.2"
+    "sequelize": "^3.3.2",
+    "superagent": "^1.3.0",
+    "ws": "^0.7.2"
   },
   "bin": {
     "validator-registry-api": "./app.js"
@@ -44,7 +46,7 @@
     "prestart": "sequelize db:migrate --url=$DATABASE_URL && npm run apidoc:build",
     "start": "node app.js",
     "pretest": "sequelize db:migrate --url=$DATABASE_URL",
-    "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 6000",
+    "test": "BASIC_AUTH_USER=user BASIC_AUTH_PASS=pass mocha test/**/* --compilers=js:babel/register --timeout 10000",
     "verify": "grunt verify",
     "db:migrate": "sequelize db:migrate --url=$DATABASE_URL",
     "db:seed": "grunt db:seed",
