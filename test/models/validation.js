@@ -86,6 +86,26 @@ describe('Validation', () => {
     })
   })
 
+  it('.create should reject duplicate entries', done => {
+    database.Validations.create({
+      validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+      ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
+      reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
+    })
+    .then(() => {
+      return database.Validations.create({
+        validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+        ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
+        reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
+      })
+    })
+    .catch(err => {
+      console.log(err.message)
+      assert.strictEqual(err.message, 'Validation error')
+      done()
+    })
+  })
+
   it('.getValidators should return list of validators', done => {
     database.Validations.create({
       validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
