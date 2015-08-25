@@ -27,6 +27,9 @@ module.exports = function(sequelize, DataTypes) {
       type     : DataTypes.STRING,
       allowNull: false
     },
+    signature: {
+      type     : DataTypes.STRING
+    },
     createdAt: {
       type     : DataTypes.DATE
     },
