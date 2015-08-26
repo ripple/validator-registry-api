@@ -11,15 +11,19 @@ describe('Validation', () => {
 
   it('.create should persist to the database',done => {
 
-    const hash = 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
-
-    database.Validations.create({
-      validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+    const validation = {
+      validation_public_key: 'n9LXZBs2aBiNsgBkhVJJjDX4xA4DoEBLycF6q8zRhXD1Zu3Kwbe4',
       reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
-      ledger_hash: hash
-    })
-    .then(validation => {
-      assert.strictEqual(validation.ledger_hash, hash)
+      ledger_hash: '6B0F79F7447CFAC355748111BB8C816CAE7062FA94675AB30DA237618F3BAD07',
+      signature: '3045022100A762691653A95EEC5B6C820F471482DAF56DB38DA61507889A2E02CEC8CF6C4F02202D08468D83DF8EAC231445382AB21F0046B3516D2A6951FA5C58D54BA16F6492'
+    }
+
+    database.Validations.create(validation)
+    .then(dbValidation => {
+      assert.strictEqual(validation.ledger_hash, dbValidation.ledger_hash)
+      assert.strictEqual(validation.validation_public_key, dbValidation.validation_public_key)
+      assert.strictEqual(validation.signature, dbValidation.signature)
+      assert.strictEqual(validation.reporter_public_key, dbValidation.reporter_public_key)
       done()
     })
   })
