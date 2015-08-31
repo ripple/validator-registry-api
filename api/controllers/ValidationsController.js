@@ -28,6 +28,10 @@ module.exports = {
         validation_public_key: req.body.validation_public_key,
         ledger_hash: req.body.ledger_hash,
         reporter_public_key: req.body.reporter_public_key
+      }).catch(error => {
+        if (error.name!=='SequelizeUniqueConstraintError') {
+          console.log(error)
+        }
       })
     })
     .catch(error => {

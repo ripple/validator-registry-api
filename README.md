@@ -28,7 +28,7 @@ sequelize db:migrate --url YOUR_POSTGRES_DB_URL
 ## Run
 
 ````
-DATABASE_URL=YOUR_POSTGRES_DB_URL npm start
+DATABASE_URL=YOUR_POSTGRES_DB_URL PEERS_API_URL=YOUR_PEERS_API_URL npm start
 ````
 
 ## Basic Authentication
