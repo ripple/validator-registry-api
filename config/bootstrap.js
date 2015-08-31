@@ -13,11 +13,15 @@ module.exports.bootstrap = function(cb) {
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  Promise.all([
-    DomainVerificationService.start(),
-    ReportService.start()
-  ]).then(() => {
+  if (process.env.NODE_ENV==='test') {
+    // Do not start services in testing
     cb()
-  });
-  // cb()
+  } else {
+    Promise.all([
+      DomainVerificationService.start(),
+      ReportService.start()
+    ]).then(() => {
+      cb()
+    });
+  }
 };
