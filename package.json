@@ -48,7 +48,8 @@
     "verify": "grunt verify",
     "db:migrate": "sequelize db:migrate --url=$DATABASE_URL",
     "db:seed": "grunt db:seed",
-    "apidoc:build": "apidoc -i api/controllers -o assets"
+    "apidoc:build": "apidoc -i api/controllers -o assets",
+    "fill-history": "grunt fill-history"
   },
   "main": "app.js",
   "repository": {

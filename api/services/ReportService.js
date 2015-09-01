@@ -117,8 +117,6 @@ export async function fillHistory() {
 
 export async function start() {
   try {
-    // Fill report history
-    await fillHistory()
 
     // Perform daily report hourly
     const job = new CronJob('0 0 * * * *', async function() {
