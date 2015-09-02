@@ -15,3 +15,4 @@
       DATABASE_URL: "{{webapp_database_url}}"
       BASIC_AUTH_USER: "{{webapp_submit_username}}"
       BASIC_AUTH_PASS: "{{webapp_submit_password}}"
+      NODE_ENV: production
