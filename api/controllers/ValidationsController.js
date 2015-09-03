@@ -52,22 +52,5 @@ module.exports = {
       })
     })
   },
-
-  /**
-   * `ValidationsController.indexByLedger()`
-   */
-  indexByLedger: function (req, res) {
-
-    database.Validations.findAll({
-      where: {
-        ledger_hash: req.params.ledger_hash
-      }
-    })
-    .then(validations => {
-      return res.json({
-        validations: validations
-      })
-    })
-  }
 };
 

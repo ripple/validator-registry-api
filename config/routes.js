@@ -53,7 +53,7 @@ module.exports.routes = {
   },
 
   '/ledgers/:ledger_hash/validations': {
-    controller: 'validations',
-    action: 'indexByLedger'
+    controller: 'ledgers',
+    action: 'show'
   }
 }
