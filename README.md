@@ -1,5 +1,7 @@
 # validators-registry-api
 
+[![Circle CI](https://circleci.com/gh/ripple/validator-registry-api.svg?style=svg)](https://circleci.com/gh/ripple/validator-registry-api)
+
 Node.js server application to track and publish rippled validator performance and ownership.
 
 a [Sails](http://sailsjs.org) application
