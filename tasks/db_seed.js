@@ -70,7 +70,7 @@ export default async function () {
         }
       }
 
-      let report = await ReportService.create(days[i].format('YYYY-MM-DD'))
+      let report = await ReportService.create(alphaCluster, days[i].format('YYYY-MM-DD'))
       console.log(report)
     }
   } catch(error) {

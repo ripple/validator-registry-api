@@ -72,7 +72,7 @@ describe('ReportsController', () => {
         }
       }
 
-      await ReportService.create(days[i].format('YYYY-MM-DD'))
+      await ReportService.create(alphaCluster, days[i].format('YYYY-MM-DD'))
     }
   })
 

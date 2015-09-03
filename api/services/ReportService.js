@@ -1,17 +1,9 @@
 import {CronJob} from 'cron'
 import moment from 'moment'
 
-const CLUSTER = [
-  'n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7',
-  'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
-  'n9L81uNCaPgtUJfaHh89gmdvXKAmSt5Gdsw2g1iPWaPkAHW5Nm4C',
-  'n9KiYM9CgngLvtRCQHZwgC2gjpdaZcCcbt3VboxiNFcKuwFVujzS',
-  'n9LdgEtkmGB9E2h3K4Vp7iGUaKuq23Zr32ehxiU8FWY7xoxbWTSA'
-]
-
 const QUORUM = 3
 
-export async function storeClusterLedgers(start, end) {
+export async function storeClusterLedgers(cluster, start, end) {
   await database.ClusterLedgers.truncate()
   const ledgers = await database.Validations.findAll({
     attributes: ['ledger_hash'],
@@ -20,7 +12,7 @@ export async function storeClusterLedgers(start, end) {
       }, {
         createdAt: { lt: end }
       }, {
-        validation_public_key: CLUSTER
+        validation_public_key: cluster
       }
     ),
     group: ['ledger_hash'],
@@ -67,7 +59,7 @@ export async function createReportEntries(start, end, report) {
 }
 
 
-export async function create(start) {
+export async function create(cluster, start) {
   if (await database.Reports.findOne({
     where: {
       date: start
@@ -77,7 +69,7 @@ export async function create(start) {
   }
 
   const end = moment(start).add(1, 'day').format('YYYY-MM-DD')
-  const cluster_ledgers = await storeClusterLedgers(start, end)
+  const cluster_ledgers = await storeClusterLedgers(cluster, start, end)
 
   if (!cluster_ledgers.length) {
     throw new Error('no ledgers validated by cluster quorum')
@@ -85,7 +77,7 @@ export async function create(start) {
 
   const report = await database.Reports.create({
     quorum: QUORUM,
-    cluster: CLUSTER,
+    cluster: cluster,
     date: start,
     cluster_validations: cluster_ledgers.length
   })
@@ -95,7 +87,7 @@ export async function create(start) {
   return report
 }
 
-export async function fillHistory() {
+export async function fillHistory(cluster) {
 
   var query = 'select distinct "createdAt"::date from "Validations"'
   const validation_dates = await database.sequelize.query(query, {
@@ -110,12 +102,12 @@ export async function fillHistory() {
         date: date
       }
     })) {
-      await create(date)
+      await create(cluster, date)
     }
   }
 }
 
-export async function start() {
+export async function start(cluster) {
   try {
 
     // Perform daily report hourly
@@ -123,12 +115,15 @@ export async function start() {
       try {
         const date = moment().subtract(1, 'day').format('YYYY-MM-DD')
 
-        const score = await database.Reports.findOne({ where: { date: date }})
+        const score = await database.Reports.findOne({ where: {
+          date: date,
+          cluster: cluster
+        }})
 
         if (score) {
           console.error('Report already computed for', date)
         } else {
-          const record = await create(date)
+          const record = await create(cluster, date)
           console.log('Completed report', record.toJSON())
         }
       } catch (error) {

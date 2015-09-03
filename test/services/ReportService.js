@@ -85,7 +85,7 @@ describe('ReportService', () => {
 
     it('should persist the report to the database', async () => {
 
-      const report = await ReportService.create(start)
+      const report = await ReportService.create(alphaCluster, start)
 
       assert(report.id)
       assert.strictEqual(report.date, start)
@@ -131,7 +131,7 @@ describe('ReportService', () => {
     it('should persist the report entries to the database', async () => {
 
       const end = moment(start).add(1, 'day').format('YYYY-MM-DD')
-      const cluster_ledgers = await ReportService.storeClusterLedgers(start, end)
+      const cluster_ledgers = await ReportService.storeClusterLedgers(alphaCluster, start, end)
 
       const report = await database.Reports.create({
         quorum: 3,
@@ -204,7 +204,7 @@ describe('ReportService', () => {
     it('should persist the ledgers validated by cluster quorum to the database', async () => {
 
       const end = moment(start).add(1, 'day').format('YYYY-MM-DD')
-      const cluster_ledgers = await ReportService.storeClusterLedgers(start, end)
+      const cluster_ledgers = await ReportService.storeClusterLedgers(alphaCluster, start, end)
       assert.strictEqual(cluster_ledgers.length, 10)
 
       const db_cluster_ledgers = await database.ClusterLedgers.findAll()
@@ -216,7 +216,7 @@ describe('ReportService', () => {
 
     it('should create reports for past days with validations', async () => {
 
-      await ReportService.fillHistory()
+      await ReportService.fillHistory(alphaCluster)
 
       const reports = await database.Reports.findAll({
         raw: true
