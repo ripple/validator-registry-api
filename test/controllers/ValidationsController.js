@@ -97,37 +97,5 @@ describe('ValidationsController', () => {
         })
     })
   })
-
-  describe('GET /ledgers/:ledger_hash/validations', () => {
-    const ledger_hash = 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
-    beforeEach((done) => {
-      database.Validations.create({
-        validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
-        reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
-        ledger_hash: ledger_hash
-      }).then(() => done())
-    })
-
-    it('.show should return validations for ledger_hash',done => {
-      request.get(`/ledgers/${ledger_hash}/validations`)
-        .expect(200)
-        .end((err, resp) => {
-          expect(resp.body.validations).to.be.instanceof(Array)
-          expect(resp.body.validations).to.have.length(1)
-          expect(resp.body.validations[0].ledger_hash).to.equal(ledger_hash)
-          done()
-        })
-    })
-
-    it('.show should return an empty array if no validations found',done => {
-      request.get('/ledgers/dummy_ledger/validations')
-        .expect(200)
-        .end((err, resp) => {
-          expect(resp.body.validations).to.be.instanceof(Array)
-          expect(resp.body.validations).to.be.empty
-          done()
-        })
-    })
-  })
 })
 
