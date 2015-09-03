@@ -15,6 +15,4 @@
     env:
       DATABASE_URL: "{{webapp_database_url}}"
       PEERS_API_URL: "{{ lookup('env','PEERS_API_URL') }}"
-      BASIC_AUTH_USER: "{{webapp_submit_username}}"
-      BASIC_AUTH_PASS: "{{webapp_submit_password}}"
       NODE_ENV: production
