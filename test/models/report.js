@@ -126,7 +126,7 @@ describe('Reports database table', () => {
     })
   })
 
-  it('should reject an invalid validation public keys', done => {
+  it('should reject an invalid validation public key', done => {
 
     database.Reports.create({
       date: '1605-11-05',
