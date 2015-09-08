@@ -24,6 +24,7 @@
       file: state=directory name=/opt/validators.ripple.com
     - name: Ensure webui directory is created
       file: state=directory name={{nginx_webui_root}} owner=ec2-user group=ec2-user
+  post_tasks:
     - name: Configure nginx
       template: src=templates/nginx.conf dest={{nginx_config}} mode=u+r
       notify:
@@ -48,7 +49,6 @@
       copy: src=private/dhparam.pem dest={{nginx_dh_params}}
       notify:
         - reload nginx container
-  post_tasks:
     - name: Remove unused docker containers
       shell: docker rm `docker ps -a -q`
       ignore_errors: yes
