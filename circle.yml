@@ -27,3 +27,9 @@ deployment:
       - ./push-to-docker.sh production
       - chmod a-rwx,u+r ansible/skynet-keys/*
       - cd ansible && ansible-playbook -i hosts -l production site.yml
+  hack:
+    branch: hack/profile-node
+    commands:
+      - ./push-to-docker.sh staging
+      - chmod a-rwx,u+r ansible/skynet-keys/*
+      - cd ansible && ansible-playbook -i hosts -l staging site.yml
