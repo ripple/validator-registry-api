@@ -24,6 +24,8 @@
       file: state=directory name=/opt/validators.ripple.com
     - name: Ensure webui directory is created
       file: state=directory name={{nginx_webui_root}} owner=ec2-user group=ec2-user
+    - name: Install docker container logrotate config file
+      copy: src: docker-logrotate dest=/etc/logrotate.d/docker-container
   post_tasks:
     - name: Configure nginx
       template: src=templates/nginx.conf dest={{nginx_config}} mode=u+r
