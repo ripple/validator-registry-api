@@ -3,7 +3,6 @@
     name: validatorsripplecom_nginx
     image: nginx:latest
     state: reloaded
-    log_driver: none
     links:
       - validatorsripplecom_web:app
     ports:
