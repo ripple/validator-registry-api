@@ -14,10 +14,20 @@
   vars_files:
     - private/webapp-{{deploy_environment}}.yml
   pre_tasks:
+    - name: Install yum-utils
+      yum: name=yum-utils state=latest
+    - name: Enable rhel server extras
+      shell: yum-config-manager --enable rhui-REGION-rhel-server-extras
     - name: Ensure docker is installed
       yum: name=docker state=latest
-    - name: Ensure docker-py is installed
-      yum: name=docker-python-1.0.0-53.el7.x86_64
+    - name: Download pip install script
+      get_url: url=https://bootstrap.pypa.io/get-pip.py dest=/home/ec2-user/get-pip.py force=yes
+    - name: Install python-pip
+      shell: python get-pip.py
+    - name: Install docker python
+      pip: name=docker-py version=1.5.0
+    - name: Upgrade urllib3
+      pip: name=urllib3 state=latest
     - name: Ensure docker is running and enabled
       service: name=docker state=started enabled=true
     - name: Ensure config directory is created
