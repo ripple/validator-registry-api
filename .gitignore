@@ -118,3 +118,8 @@ nbproject
 .node_history
 
 apidoc/
+
+assets/api_data.js
+assets/api_data.json
+assets/api_project.js
+assets/api_project.json
