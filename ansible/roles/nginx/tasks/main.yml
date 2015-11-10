@@ -1,3 +1,5 @@
+- name: Pull docker image
+  shell: docker pull nginx:latest
 - name: Stand up nginx container
   docker:
     name: validatorsripplecom_nginx

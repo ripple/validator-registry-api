@@ -1,3 +1,5 @@
+- name: Pull docker image
+  shell: docker pull gliderlabs/logspout
 - name: Stand up logspout
   docker:
     name: logspout

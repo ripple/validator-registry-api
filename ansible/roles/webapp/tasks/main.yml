@@ -1,13 +1,14 @@
+- name: Log in to quay.io
+  shell: docker login --email=ops@ripple.com --username={{webapp_docker_username}} --password={{webapp_docker_password}} quay.io
+- name: Pull docker image
+  shell: docker pull quay.io/ripple/validators.ripple.com:{{deploy_environment}}
+- name: Log out of quay.io
+  shell: docker logout quay.io
 - name: Stand up webapp container
   docker:
     name: validatorsripplecom_web
     image: "quay.io/ripple/validators.ripple.com:{{deploy_environment}}"
-    registry: "https://quay.io/v1/"
-    email: ops@ripple.com
-    username: "{{webapp_docker_username}}"
-    password: "{{webapp_docker_password}}"
     state: reloaded
-    pull: always
     restart_policy: always
     expose:
       - 1337
