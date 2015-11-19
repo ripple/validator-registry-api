@@ -56,11 +56,12 @@ export async function subscribeToRippleds(rippleds) {
     ws.on('message', function(dataString, flags) {
       const data = JSON.parse(dataString)
       if (data.type==='validationReceived') {
-        database.Validations.create({
-          validation_public_key: data.validation_public_key,
-          ledger_hash: data.ledger_hash,
-          signature: data.signature,
-          reporter_public_key: connections[this.url].public_key
+        database.Validations.findOrCreate({
+          where: {
+            validation_public_key: data.validation_public_key,
+            ledger_hash: data.ledger_hash,
+            signature: data.signature
+          }
         }).catch(error => {
           console.log(error)
         })

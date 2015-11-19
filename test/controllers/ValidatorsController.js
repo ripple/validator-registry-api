@@ -10,7 +10,6 @@ describe('ValidatorsController', () => {
 
     await database.Validations.create({
       validation_public_key: validationPublicKey,
-      reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
       ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
     })
     await database.Verifications.create({
