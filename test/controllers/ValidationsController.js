@@ -12,7 +12,6 @@ describe('ValidationsController', () => {
     beforeEach((done) => {
       database.Validations.create({
         validation_public_key: validator,
-        reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
         ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
       }).then(() => done())
     })
@@ -44,7 +43,6 @@ describe('ValidationsController', () => {
     beforeEach((done) => {
       database.Validations.create({
         validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
-        reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj',
         ledger_hash: ledger_hash
       }).then(() => done())
     })

@@ -41,13 +41,11 @@ describe('ReportService', () => {
           await database.Validations.create({
             ledger_hash: ledgerHash,
             validation_public_key: validator,
-            reporter_public_key: validator,
             createdAt: days[i].toDate()
           })
           await database.Validations.create({
             ledger_hash: SHA256(),
             validation_public_key: validator,
-            reporter_public_key: validator,
             createdAt: days[i].toDate()
           })
         }
@@ -58,14 +56,12 @@ describe('ReportService', () => {
             await database.Validations.create({
               ledger_hash: ledgerHash,
               validation_public_key: validator,
-              reporter_public_key: validator,
               createdAt: days[i].toDate()
             })
           } else {
             await database.Validations.create({
               ledger_hash: SHA256(),
               validation_public_key: validator,
-              reporter_public_key: validator,
               createdAt: days[i].toDate()
             })
           }

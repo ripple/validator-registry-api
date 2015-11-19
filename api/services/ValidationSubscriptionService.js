@@ -59,10 +59,11 @@ export async function subscribeToRippleds(rippleds) {
         database.Validations.create({
           validation_public_key: data.validation_public_key,
           ledger_hash: data.ledger_hash,
-          signature: data.signature,
-          reporter_public_key: connections[this.url].public_key
+          signature: data.signature
         }).catch(error => {
-          console.log(error)
+          if (error.name!=='SequelizeUniqueConstraintError') {
+            console.log(error)
+          }
         })
       } else if (data.error==='unknownStream') {
         delete connections[this.url]
