@@ -16,7 +16,7 @@ test:
     - docker-compose run webapp npm test
 deployment:
   staging:
-    branch: staging
+    branch: hack/test-deploy
     commands:
       - ./push-to-docker.sh staging
       - chmod a-rwx,u+r ansible/skynet-keys/*
