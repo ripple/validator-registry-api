@@ -21,7 +21,6 @@ describe('DomainVerificationService', () => {
       await database.Validations.create({
         validation_public_key: validation_public_key,
         ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
-        reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
       })
       await DomainVerificationService.verify()
       const verification = await database.Verifications.findOne({
@@ -39,7 +38,6 @@ describe('DomainVerificationService', () => {
       await database.Validations.create({
         validation_public_key: validation_public_key,
         ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
-        reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
       })
       await DomainVerificationService.verify()
       const verification = await database.Verifications.findOne({
@@ -57,7 +55,6 @@ describe('DomainVerificationService', () => {
       await database.Validations.create({
         validation_public_key: validation_public_key,
         ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
-        reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
       })
       await DomainVerificationService.verify()
       await DomainVerificationService.verify()
@@ -76,7 +73,6 @@ describe('DomainVerificationService', () => {
       await database.Validations.create({
         validation_public_key: validation_public_key,
         ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
-        reporter_public_key: 'n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj'
       })
       await DomainVerificationService.verify()
       await DomainVerificationService.verify()

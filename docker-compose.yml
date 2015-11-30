@@ -8,5 +8,6 @@ webapp:
     - postgres
   environment:
     - DATABASE_URL=postgres://postgres:postgres@postgres/postgres
+    - PEERS_API_URL
 postgres:
   image: postgres
