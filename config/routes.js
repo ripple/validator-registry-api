@@ -27,11 +27,6 @@ module.exports.routes = {
     action: 'index'
   },
 
-  'POST /validations': {
-    controller: 'validations',
-    action: 'create'
-  },
-
   'GET /reports/:date': {
     controller: 'reports',
     action: 'show'

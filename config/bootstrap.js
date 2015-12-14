@@ -19,7 +19,8 @@ module.exports.bootstrap = function(cb) {
   } else {
     Promise.all([
       DomainVerificationService.start(),
-      ReportService.start()
+      ReportService.start(),
+      ValidationSubscriptionService.start()
     ]).then(() => {
       cb()
     });
