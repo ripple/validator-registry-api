@@ -18,11 +18,14 @@ module.exports = {
       },
       sequence: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       signature: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      revoked: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

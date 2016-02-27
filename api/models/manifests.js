@@ -26,12 +26,15 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     sequence: {
-      type     : DataTypes.INTEGER,
+      type     : DataTypes.BIGINT,
       allowNull: false
     },
     signature: {
       type     : DataTypes.STRING,
       allowNull: false
+    },
+    revoked: {
+      type     : DataTypes.BOOLEAN
     },
     createdAt: {
       type     : DataTypes.DATE
@@ -78,27 +81,37 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Manifests.afterCreate(async function(manifest, options, fn) {
+    const MAX_SEQUENCE = 4294967295
 
-    // Transfer domain verification to new ephemeral_public_key
-    const prev_manifest = await database.Manifests.findOne({
+    // Check if this revokes previous ephemeral keys or the master key itself
+    if (manifest.sequence>=MAX_SEQUENCE) {
+
+      // New manifest revokes master public key
+      await database.Manifests.update({
+        revoked: true
+      }, {
+        fields: ['revoked'],
+        where: {
+          master_public_key: manifest.master_public_key
+        }
+      })
+      return fn(null, manifest)
+    }
+
+    const active_manifest = await database.Manifests.findOne({
       where: {
         master_public_key: manifest.master_public_key,
         $not: {
           id: manifest.id
         }
       },
-      order: 'sequence DESC',
-      raw: true
+      order: [['sequence', 'DESC']]
     })
-    if (prev_manifest) {
-      await database.Verifications.update({
-        validation_public_key: manifest.ephemeral_public_key
-      }, {
-        fields: ['validation_public_key'],
-        where: {
-          validation_public_key: prev_manifest.ephemeral_public_key
-        },
-        validate: false
+    if (active_manifest) {
+      let revoked_manifest = active_manifest.sequence>=manifest.sequence ?
+                              manifest : active_manifest
+      await revoked_manifest.update({
+        revoked: true
       })
     }
     fn(null, manifest)
