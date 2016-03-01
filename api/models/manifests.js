@@ -80,14 +80,24 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
+  Manifests.master_keys = {}
+  Manifests.ephemeral_keys = {}
+
   Manifests.afterCreate(async function(manifest, options, fn) {
     const MAX_SEQUENCE = 4294967295
 
     // Check if this revokes previous ephemeral keys or the master key itself
     if (manifest.sequence>=MAX_SEQUENCE) {
 
+      // Update cache
+      const ephemeral_key = this.ephemeral_keys[manifest.master_public_key]
+      if (ephemeral_key) {
+        delete this.master_keys[ephemeral_key]
+      }
+      delete this.ephemeral_keys[manifest.master_public_key]
+
       // New manifest revokes master public key
-      await database.Manifests.update({
+      await this.update({
         revoked: true
       }, {
         fields: ['revoked'],
@@ -98,7 +108,7 @@ module.exports = function(sequelize, DataTypes) {
       return fn(null, manifest)
     }
 
-    const active_manifest = await database.Manifests.findOne({
+    const active_manifest = await this.findOne({
       where: {
         master_public_key: manifest.master_public_key,
         $not: {
@@ -108,11 +118,29 @@ module.exports = function(sequelize, DataTypes) {
       order: [['sequence', 'DESC']]
     })
     if (active_manifest) {
-      let revoked_manifest = active_manifest.sequence>=manifest.sequence ?
-                              manifest : active_manifest
-      await revoked_manifest.update({
-        revoked: true
-      })
+      if (active_manifest.sequence>=manifest.sequence) {
+
+        // Revoke new manifest
+        await manifest.update({
+          revoked: true
+        })
+      } else {
+
+        // Update cache
+        this.master_keys[manifest.ephemeral_public_key] = manifest.master_public_key
+        this.ephemeral_keys[manifest.master_public_key] = manifest.ephemeral_public_key
+        delete this.master_keys[active_manifest.ephemeral_public_key]
+
+        // Revoke previous manifest
+        await active_manifest.update({
+          revoked: true
+        })
+      }
+    } else {
+
+      // Add new master key to cache
+      this.master_keys[manifest.ephemeral_public_key] = manifest.master_public_key
+      this.ephemeral_keys[manifest.master_public_key] = manifest.ephemeral_public_key
     }
     fn(null, manifest)
   })
