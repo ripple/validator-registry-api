@@ -83,6 +83,9 @@ export async function start() {
       throw new Error('PEERS_API_URL required')
     }
 
+    // Load manifests into cache
+    await database.Manifests.loadCache()
+
     const peers_api_url = process.env.PEERS_API_URL
 
     // Subscribe to rippleds
