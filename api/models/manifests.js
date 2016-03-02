@@ -1,7 +1,29 @@
 'use strict';
-import addressCodec from 'ripple-address-codec';
+import addressCodec from 'ripple-address-codec'
 import elliptic from 'elliptic'
-const Ed25519 = elliptic.eddsa('ed25519');
+const Ed25519 = elliptic.eddsa('ed25519')
+
+const MAX_SEQUENCE = 4294967295
+
+// Store a map of ephemeral to master public keys for quick lookup
+// to check each incoming validation for a known master public key.
+let master_keys = {}
+
+function clearCache() {
+  master_keys = {}
+}
+
+function deleteKey(ephemeral_public_key) {
+  delete master_keys[ephemeral_public_key]
+}
+
+function getKey(ephemeral_public_key) {
+  return master_keys[ephemeral_public_key]
+}
+
+function setKey(ephemeral_public_key, master_public_key) {
+  master_keys[ephemeral_public_key] = master_public_key
+}
 
 module.exports = function(sequelize, DataTypes) {
   var Manifests = sequelize.define('Manifests', {
@@ -32,9 +54,6 @@ module.exports = function(sequelize, DataTypes) {
     signature: {
       type     : DataTypes.STRING,
       allowNull: false
-    },
-    revoked: {
-      type     : DataTypes.BOOLEAN
     },
     createdAt: {
       type     : DataTypes.DATE
@@ -74,37 +93,49 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     classMethods: {
+      getEphemeralKey: async function(master_public_key) {
+        const manifest = await this.findOne({
+          where: {
+            master_public_key: master_public_key
+          },
+          order: [['sequence', 'DESC']],
+          raw: true
+        })
+        return manifest && manifest.sequence<MAX_SEQUENCE ?
+                manifest.ephemeral_public_key : null
+      },
+      getMasterKey: function(ephemeral_public_key) {
+        return getKey(ephemeral_public_key)
+      },
+      loadCache: async function() {
+        clearCache()
+        const db_master_keys = await this.aggregate('master_public_key', 'DISTINCT', {
+          plain: false
+        })
+        for (let distinct_master_key of db_master_keys) {
+          const master_key = distinct_master_key['DISTINCT']
+          const ephemeral_key = await this.getEphemeralKey(master_key)
+          if (ephemeral_key) {
+            setKey(ephemeral_key, master_key)
+          }
+        }
+      },
       associate: function(models) {
         // associations can be defined here
       },
     }
   });
 
-  Manifests.master_keys = {}
-  Manifests.ephemeral_keys = {}
-
   Manifests.afterCreate(async function(manifest, options, fn) {
-    const MAX_SEQUENCE = 4294967295
 
     // Check if this revokes previous ephemeral keys or the master key itself
     if (manifest.sequence>=MAX_SEQUENCE) {
 
       // Update cache
-      const ephemeral_key = this.ephemeral_keys[manifest.master_public_key]
+      const ephemeral_key = this.getEphemeralKey(manifest.master_public_key)
       if (ephemeral_key) {
-        delete this.master_keys[ephemeral_key]
+        deleteKey(ephemeral_key)
       }
-      delete this.ephemeral_keys[manifest.master_public_key]
-
-      // New manifest revokes master public key
-      await this.update({
-        revoked: true
-      }, {
-        fields: ['revoked'],
-        where: {
-          master_public_key: manifest.master_public_key
-        }
-      })
       return fn(null, manifest)
     }
 
@@ -117,32 +148,24 @@ module.exports = function(sequelize, DataTypes) {
       },
       order: [['sequence', 'DESC']]
     })
-    if (active_manifest) {
-      if (active_manifest.sequence>=manifest.sequence) {
-
-        // Revoke new manifest
-        await manifest.update({
-          revoked: true
-        })
-      } else {
-
-        // Update cache
-        this.master_keys[manifest.ephemeral_public_key] = manifest.master_public_key
-        this.ephemeral_keys[manifest.master_public_key] = manifest.ephemeral_public_key
-        delete this.master_keys[active_manifest.ephemeral_public_key]
-
-        // Revoke previous manifest
-        await active_manifest.update({
-          revoked: true
-        })
-      }
-    } else {
+    if (!active_manifest) {
 
       // Add new master key to cache
-      this.master_keys[manifest.ephemeral_public_key] = manifest.master_public_key
-      this.ephemeral_keys[manifest.master_public_key] = manifest.ephemeral_public_key
+      setKey(manifest.ephemeral_public_key, manifest.master_public_key)
+    } else if (active_manifest.sequence<manifest.sequence) {
+
+      // Update cache
+      setKey(manifest.ephemeral_public_key, manifest.master_public_key)
+      deleteKey(active_manifest.ephemeral_public_key)
     }
     fn(null, manifest)
+  })
+
+  Manifests.afterBulkDestroy(async function(manifests, fn) {
+    if (manifests.truncate) {
+      clearCache()
+    }
+    fn(null, manifests)
   })
 
   return Manifests;

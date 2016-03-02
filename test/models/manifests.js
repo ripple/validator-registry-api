@@ -11,10 +11,10 @@ describe('Manifests', () => {
   it('.create should persist to the database',async() => {
 
     const manifest = {
-      ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
-      master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
       sequence: 4,
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     }
 
     const dbManifest = await database.Manifests.create(manifest)
@@ -26,9 +26,9 @@ describe('Manifests', () => {
   it('.create should require an ephemeral_public_key',done => {
 
     database.Manifests.create({
-      master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
       sequence: 4,
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     })
     .catch(err => {
       assert.strictEqual(err.message, 'notNull Violation: ephemeral_public_key cannot be null')
@@ -40,9 +40,9 @@ describe('Manifests', () => {
 
     database.Manifests.create({
       ephemeral_public_key: 'ramcE1KE3gxHc8Yhs6hJtE55CrjkHUQyo',
-      master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
       sequence: 4,
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     })
     .catch(err => {
       assert(err.message.indexOf('Validation error: Invalid ephemeral_public_key')>-1)
@@ -53,9 +53,9 @@ describe('Manifests', () => {
   it('.create should require a master_public_key',done => {
 
     database.Manifests.create({
-      ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
       sequence: 4,
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     })
     .catch(err => {
       assert.strictEqual(err.message, 'notNull Violation: master_public_key cannot be null')
@@ -66,10 +66,10 @@ describe('Manifests', () => {
   it('.create should require a valid master_public_key',done => {
 
     database.Manifests.create({
-      ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
       master_public_key: 'ramcE1KE3gxHc8Yhs6hJtE55CrjkHUQyo',
       sequence: 4,
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     })
     .catch(err => {
       assert(err.message.indexOf('Validation error: Invalid master_public_key')>-1)
@@ -80,9 +80,9 @@ describe('Manifests', () => {
   it('.create should require a sequence',done => {
 
     database.Manifests.create({
-      ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
-      master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     })
     .catch(err => {
       assert.strictEqual(err.message, 'notNull Violation: sequence cannot be null')
@@ -93,8 +93,8 @@ describe('Manifests', () => {
   it('.create should require a signature',done => {
 
     database.Manifests.create({
-      ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
-      master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
       sequence: 4
     })
     .catch(err => {
@@ -105,17 +105,17 @@ describe('Manifests', () => {
 
   it('.create should reject duplicate entries', done => {
     database.Manifests.create({
-      ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
-      master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
       sequence: 4,
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     })
     .then(() => {
       return database.Manifests.create({
-        ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
-        master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
+        ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+        master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
         sequence: 4,
-        signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+        signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
       })
     })
     .catch(err => {
@@ -124,11 +124,10 @@ describe('Manifests', () => {
     })
   })
 
-
   it('.create should reject invalid signatures', done => {
     database.Manifests.create({
-      ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
-      master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
       sequence: 4,
       signature: 'e823a3e33a076de2e83305108bd8ddc51371bb9751ec1c7cad85d1db52f2c82830e96831a5b1eb012a7b131d99426358daa4cded752b48cf7d4d2f724609c200'
     })
@@ -138,162 +137,64 @@ describe('Manifests', () => {
     })
   })
 
-  it('.afterCreate should revoke master key for max sequence', async() => {
-    const master_public_key = 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB'
-    const old_ephemeral_public_key = 'n9Kk6U5nSF8EggfmTpMdna96UuXWAVwSsDSXRkXeZ5vLcAFk77tr'
-    const new_ephemeral_public_key = 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2'
-
-    await database.Manifests.create({
-      ephemeral_public_key: old_ephemeral_public_key,
-      master_public_key: master_public_key,
-      sequence: 3,
-      signature: '79edce68809fdec46dfe09bc0f7403e65e7bd4e5dd0ebfcf19ba53b22d9af2ef8ca6a74e06eee4775862e5253a7b83ad854ef2fb3c8ab8d42b0b6eab09ec3805'
-    })
-    await database.Manifests.create({
-      ephemeral_public_key: new_ephemeral_public_key,
-      master_public_key: master_public_key,
-      sequence: 4294967295,
-      signature: 'e15d7654578c9a686e338c9ae0f473660426d997d4773572490c7badb55d4e0649f7de842dbcec3550984c7cd0257c5c87c4b0409b7c3b0057094ed3eeebe80f'
-    })
-    const manifests = await database.Manifests.findAll({
-      'where': {
-        master_public_key: master_public_key
-      },
-      raw: true
-    })
-    assert(manifests instanceof Array)
-    assert.strictEqual(manifests.length, 2)
-    assert(manifests[0].revoked)
-    assert(manifests[1].revoked)
-  })
-
-  it('.afterCreate should mark new stale manifest as revoked', async() => {
-    const master_public_key = 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB'
-    const old_ephemeral_public_key = 'n9Kk6U5nSF8EggfmTpMdna96UuXWAVwSsDSXRkXeZ5vLcAFk77tr'
-    const new_ephemeral_public_key = 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2'
-
-    await database.Manifests.create({
-      ephemeral_public_key: old_ephemeral_public_key,
-      master_public_key: master_public_key,
-      sequence: 3,
-      signature: '79edce68809fdec46dfe09bc0f7403e65e7bd4e5dd0ebfcf19ba53b22d9af2ef8ca6a74e06eee4775862e5253a7b83ad854ef2fb3c8ab8d42b0b6eab09ec3805'
-    })
-    await database.Manifests.create({
-      ephemeral_public_key: new_ephemeral_public_key,
-      master_public_key: master_public_key,
-      sequence: 2,
-      signature: 'f1ae38a72398cf2cfcb3e3d90ec9459d46a5b5e1dc880e11eaa3dcebb1ca2072259953c993980573be9a4158fbea3ea9f993825d8764c57681470858ab1a060e'
-    })
-    const manifests = await database.Manifests.findAll({
-      'where': {
-        master_public_key: master_public_key
-      },
-      order: '"createdAt" DESC',
-      raw: true
-    })
-    assert(manifests instanceof Array)
-    assert.strictEqual(manifests.length, 2)
-    assert.strictEqual(manifests[0].ephemeral_public_key, new_ephemeral_public_key)
-    assert(manifests[0].revoked)
-    assert.strictEqual(manifests[1].ephemeral_public_key, old_ephemeral_public_key)
-    assert(!manifests[1].revoked)
-  })
-
-  it('.afterCreate should mark previous active manifest as revoked', async() => {
-    const master_public_key = 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB'
-    const old_ephemeral_public_key = 'n9Kk6U5nSF8EggfmTpMdna96UuXWAVwSsDSXRkXeZ5vLcAFk77tr'
-    const new_ephemeral_public_key = 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2'
-
-    await database.Manifests.create({
-      ephemeral_public_key: old_ephemeral_public_key,
-      master_public_key: master_public_key,
-      sequence: 3,
-      signature: '79edce68809fdec46dfe09bc0f7403e65e7bd4e5dd0ebfcf19ba53b22d9af2ef8ca6a74e06eee4775862e5253a7b83ad854ef2fb3c8ab8d42b0b6eab09ec3805'
-    })
-    await database.Manifests.create({
-      ephemeral_public_key: new_ephemeral_public_key,
-      master_public_key: master_public_key,
-      sequence: 4,
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
-    })
-    const manifests = await database.Manifests.findAll({
-      'where': {
-        master_public_key: master_public_key
-      },
-      order: '"createdAt" DESC',
-      raw: true
-    })
-    assert(manifests instanceof Array)
-    assert.strictEqual(manifests.length, 2)
-    assert.strictEqual(manifests[0].ephemeral_public_key, new_ephemeral_public_key)
-    assert(!manifests[0].revoked)
-    assert.strictEqual(manifests[1].ephemeral_public_key, old_ephemeral_public_key)
-    assert(manifests[1].revoked)
-  })
-
   it('.afterCreate should add new manifest keys to cache', async() => {
 
     const manifest = {
-      ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
-      master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
       sequence: 4,
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     }
 
     await database.Manifests.create(manifest)
 
-    const master_public_key = database.Manifests.master_keys[manifest.ephemeral_public_key]
-    const ephemeral_public_key = database.Manifests.ephemeral_keys[manifest.master_public_key]
+    const master_public_key = database.Manifests.getMasterKey(manifest.ephemeral_public_key)
 
     assert(master_public_key)
     assert.strictEqual(master_public_key, manifest.master_public_key)
-    assert(ephemeral_public_key)
-    assert.strictEqual(ephemeral_public_key, manifest.ephemeral_public_key)
   })
-  it('.afterCreate not cache new stale manifests', async() => {
-    const master_public_key = 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB'
+
+  it('.afterCreate should not cache new stale manifests', async() => {
+    const master_public_key = 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B'
     const domain = 'testnet.ripple.com'
-    const old_ephemeral_public_key = 'n9Kk6U5nSF8EggfmTpMdna96UuXWAVwSsDSXRkXeZ5vLcAFk77tr'
-    const new_ephemeral_public_key = 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2'
+    const old_ephemeral_public_key = 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA'
+    const new_ephemeral_public_key = 'n9KXuFUqkykLVr8oDwDeNuu33akSuUXShNER4y96Uco88R4xwpB5'
 
     await database.Manifests.create({
       ephemeral_public_key: old_ephemeral_public_key,
       master_public_key: master_public_key,
-      sequence: 3,
-      signature: '79edce68809fdec46dfe09bc0f7403e65e7bd4e5dd0ebfcf19ba53b22d9af2ef8ca6a74e06eee4775862e5253a7b83ad854ef2fb3c8ab8d42b0b6eab09ec3805'
+      sequence: 4,
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     })
     await database.Manifests.create({
       ephemeral_public_key: new_ephemeral_public_key,
       master_public_key: master_public_key,
       sequence: 2,
-      signature: 'f1ae38a72398cf2cfcb3e3d90ec9459d46a5b5e1dc880e11eaa3dcebb1ca2072259953c993980573be9a4158fbea3ea9f993825d8764c57681470858ab1a060e'
+      signature: '58a01747386a7dc26e21512c52a7a01ef6ad2efc99fc2ecf0d288665f7bf7e831949abf7129dada2c47f5633ffa73a1a00d5fc061892ecead3a014a99924480e'
     })
 
-    const cached_master_public_key = database.Manifests.master_keys[old_ephemeral_public_key]
-    const cached_ephemeral_public_key = database.Manifests.ephemeral_keys[master_public_key]
-
+    const cached_master_public_key = database.Manifests.getMasterKey(old_ephemeral_public_key)
     assert(cached_master_public_key)
     assert.strictEqual(cached_master_public_key, master_public_key)
-    assert(cached_ephemeral_public_key)
-    assert.strictEqual(cached_ephemeral_public_key, old_ephemeral_public_key)
-    assert(!database.Manifests[new_ephemeral_public_key])
+    assert(!database.Manifests.getMasterKey(new_ephemeral_public_key))
   })
+
   it('.afterCreate should remove previous active manifest from cache', async() => {
-    const master_public_key = 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB'
-    const old_ephemeral_public_key = 'n9Kk6U5nSF8EggfmTpMdna96UuXWAVwSsDSXRkXeZ5vLcAFk77tr'
-    const new_ephemeral_public_key = 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2'
+    const master_public_key = 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B'
+    const old_ephemeral_public_key = 'n9KXuFUqkykLVr8oDwDeNuu33akSuUXShNER4y96Uco88R4xwpB5'
+    const new_ephemeral_public_key = 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA'
 
     await database.Manifests.create({
       ephemeral_public_key: old_ephemeral_public_key,
       master_public_key: master_public_key,
-      sequence: 3,
-      signature: '79edce68809fdec46dfe09bc0f7403e65e7bd4e5dd0ebfcf19ba53b22d9af2ef8ca6a74e06eee4775862e5253a7b83ad854ef2fb3c8ab8d42b0b6eab09ec3805'
+      sequence: 2,
+      signature: '58a01747386a7dc26e21512c52a7a01ef6ad2efc99fc2ecf0d288665f7bf7e831949abf7129dada2c47f5633ffa73a1a00d5fc061892ecead3a014a99924480e'
     })
     await database.Manifests.create({
       ephemeral_public_key: new_ephemeral_public_key,
       master_public_key: master_public_key,
       sequence: 4,
-      signature: '224d3852bdaf9bdd695fdc22f3b920107c61d80091c7da5a68153fcbc62ba79f7d8e0e0125f043477ec780a6711641ef9f8c53d9eacff3116415008e6fef2401'
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
     })
     const manifests = await database.Manifests.findAll({
       'where': {
@@ -302,26 +203,112 @@ describe('Manifests', () => {
       order: '"createdAt" DESC',
       raw: true
     })
-    const cached_master_public_key = database.Manifests.master_keys[new_ephemeral_public_key]
-    const cached_ephemeral_public_key = database.Manifests.ephemeral_keys[master_public_key]
+    const cached_master_public_key = database.Manifests.getMasterKey(new_ephemeral_public_key)
 
     assert(cached_master_public_key)
     assert.strictEqual(cached_master_public_key, master_public_key)
-    assert(cached_ephemeral_public_key)
-    assert.strictEqual(cached_ephemeral_public_key, new_ephemeral_public_key)
-    assert(!database.Manifests[old_ephemeral_public_key])
+    assert(!database.Manifests.getMasterKey(old_ephemeral_public_key))
   })
+
   it('.afterCreate does not cache when first manifest revokes the master key', async() => {
     const manifest = {
-      master_public_key: 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB',
-      ephemeral_public_key: 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
+      ephemeral_public_key: 'n9KVoK1g4NuSuMXqScpVhRVbBDNmLD8tPWeRKdewNVUN5F87YjwR',
       sequence: 4294967295,
-      signature: 'e15d7654578c9a686e338c9ae0f473660426d997d4773572490c7badb55d4e0649f7de842dbcec3550984c7cd0257c5c87c4b0409b7c3b0057094ed3eeebe80f'
+      signature: '4d62df5d4cdc66b96a2fab58739515a636662cdf9d50d3b35ca7986293a72c3c0b5d518355274850e73e801628c5b6c7830546eab098f4e4548199bdc4993405'
     }
 
     await database.Manifests.create(manifest)
 
     assert(!database.Manifests[manifest.ephemeral_public_key])
     assert(!database.Manifests[manifest.master_public_key])
+  })
+
+  it('.loadCache stores manifests from database in cache', async() => {
+    const master_public_key = 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B'
+    const good_ephemeral_public_key = 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA'
+    const stale_ephemeral_public_key = 'n9KXuFUqkykLVr8oDwDeNuu33akSuUXShNER4y96Uco88R4xwpB5'
+    const another_master_public_key = 'nHBijVWHoQqDqeH9wBaessKAiAtNNPchCyg87zKC59JP3zQAWaFc'
+    const another_good_ephemeral_public_key = 'n9KgeRR7WGdqiNXVsfhG4FYLpPQqRYVDD6d7yKijqZ8U3eQyk2cn'
+
+    await database.Manifests.create({
+      ephemeral_public_key: good_ephemeral_public_key,
+      master_public_key: master_public_key,
+      sequence: 4,
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
+    })
+    await database.Manifests.create({
+      ephemeral_public_key: stale_ephemeral_public_key,
+      master_public_key: master_public_key,
+      sequence: 2,
+      signature: '58a01747386a7dc26e21512c52a7a01ef6ad2efc99fc2ecf0d288665f7bf7e831949abf7129dada2c47f5633ffa73a1a00d5fc061892ecead3a014a99924480e'
+    })
+    await database.Manifests.create({
+      ephemeral_public_key: another_good_ephemeral_public_key,
+      master_public_key: another_master_public_key,
+      sequence: 20,
+      signature: '6f9b07782513dbbe5bb87d939855fa84053cce2f63905e4b518aba41f31ee3016ab8628d99b6e041797aedc103629214e6f15e92e33248d2f932044e42c5d50a'
+    })
+
+    await database.Manifests.loadCache()
+
+    const cached_master_public_key = database.Manifests.getMasterKey(good_ephemeral_public_key)
+    const another_cached_master_public_key = database.Manifests.getMasterKey(another_good_ephemeral_public_key)
+
+    assert(cached_master_public_key)
+    assert.strictEqual(cached_master_public_key, master_public_key)
+    assert(another_cached_master_public_key)
+    assert.strictEqual(another_cached_master_public_key, another_master_public_key)
+    assert(!database.Manifests.getMasterKey(stale_ephemeral_public_key))
+  })
+
+  it('.loadCache does not store revoked manifests from database in cache', async() => {
+    const master_public_key = 'nHBijVWHoQqDqeH9wBaessKAiAtNNPchCyg87zKC59JP3zQAWaFc'
+    const ephemeral_public_key = 'n9KgeRR7WGdqiNXVsfhG4FYLpPQqRYVDD6d7yKijqZ8U3eQyk2cn'
+    const revoked_master_public_key = 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B'
+    const stale_ephemeral_public_key = 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA'
+    const another_stale_ephemeral_public_key = 'n9KVoK1g4NuSuMXqScpVhRVbBDNmLD8tPWeRKdewNVUN5F87YjwR'
+
+    await database.Manifests.create({
+      ephemeral_public_key: ephemeral_public_key,
+      master_public_key: master_public_key,
+      sequence: 20,
+      signature: '6f9b07782513dbbe5bb87d939855fa84053cce2f63905e4b518aba41f31ee3016ab8628d99b6e041797aedc103629214e6f15e92e33248d2f932044e42c5d50a'
+    })
+    await database.Manifests.create({
+      ephemeral_public_key: stale_ephemeral_public_key,
+      master_public_key: revoked_master_public_key,
+      sequence: 4,
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
+    })
+    await database.Manifests.create({
+      ephemeral_public_key: another_stale_ephemeral_public_key,
+      master_public_key: revoked_master_public_key,
+      sequence: 4294967295,
+      signature: '4d62df5d4cdc66b96a2fab58739515a636662cdf9d50d3b35ca7986293a72c3c0b5d518355274850e73e801628c5b6c7830546eab098f4e4548199bdc4993405'
+    })
+
+    await database.Manifests.loadCache()
+
+    const cached_master_public_key = database.Manifests.getMasterKey(ephemeral_public_key)
+
+    assert(cached_master_public_key)
+    assert.strictEqual(cached_master_public_key, master_public_key)
+    assert(!database.Manifests.getMasterKey(stale_ephemeral_public_key))
+    assert(!database.Manifests.getMasterKey(another_stale_ephemeral_public_key))
+  })
+
+  it('.getEphemeralKey should return current master key\'s ephemeral key', async() => {
+    const manifest = {
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
+      sequence: 4,
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
+    }
+
+    await database.Manifests.create(manifest)
+
+    const ephemeral_public_key = await database.Manifests.getEphemeralKey(manifest.master_public_key)
+    assert.strictEqual(ephemeral_public_key, manifest.ephemeral_public_key)
   })
 })

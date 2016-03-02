@@ -84,7 +84,6 @@ describe('Validation', () => {
       })
     })
     .catch(err => {
-      console.log(err.message)
       assert.strictEqual(err.message, 'Validation error')
       done()
     })
