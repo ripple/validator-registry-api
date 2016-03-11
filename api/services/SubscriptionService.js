@@ -38,6 +38,7 @@ export function subscribe(ip) {
   // Resubscribe to are already connected addresses
   if (connections[ip]) {
     requestSubscribe(connections[ip])
+    return
   }
 
   let ws = new WebSocket(ip);
