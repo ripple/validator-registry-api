@@ -126,8 +126,8 @@ export async function start() {
     await subscribeToRippleds(rippleds)
     console.log('Subscribed to rippled validation and manifest streams')
 
-    // Subscribe to new rippled connections every five minutes
-    const job = new CronJob('0 */5 * * * *', async function() {
+    // Subscribe to new rippled connections hourly
+    const job = new CronJob('0 30 * * * *', async function() {
       try {
         const rippleds = await getRippleds(peers_api_url)
         await subscribeToRippleds(rippleds)
