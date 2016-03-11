@@ -9,24 +9,43 @@ export async function verify() {
 
   for (let validator of validators) {
 
+    // Check for ephemeral public key from validator manifest
+    // Validator operators set the domain field on the account root for the
+    // ephemeral public key, but list the master public key in ripple.txt
+    const ephemeral_public_key = await database.Manifests.getEphemeralKey(validator)
+    let master_public_key
+    if (ephemeral_public_key) {
+      master_public_key = validator
+      validator = ephemeral_public_key
+    }
+
     // Get the most recent domain verification for this validator
     const verification = await database.Verifications.findOne({
       where: {validation_public_key: validator},
-      order: '"createdAt" DESC'
+      order: '"createdAt" DESC',
+      raw: true
     })
 
     try {
-      const domain = await verifier.verifyValidatorDomain(validator)
+      const domain = await verifier.verifyValidatorDomain(validator, master_public_key)
 
-      if (!(verification && verification.domain===domain)) {
+      if (!verification || verification.domain!==domain) {
         await database.Verifications.create({
-          validation_public_key: validator,
+          validation_public_key: master_public_key ? master_public_key : validator,
           domain: domain
         })
       }
     } catch(err) {
+      if (err.type==='AccountDomainNotFound' && master_public_key &&
+          verification && verification.domain) {
 
-      if (!(verification && verification.error===err.type)) {
+        // Ignore AccountDomainNotFound for validators using manifests
+        // if domain verification was previously success.
+        // This is so that the domain to does not have to be set in the
+        // account root for each new ephemeral key.
+      } else if (!verification || verification.error!==err.type) {
+
+        // Record new error
         await database.Verifications.create({
           validation_public_key: validator,
           error: err.type

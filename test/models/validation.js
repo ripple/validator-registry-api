@@ -3,10 +3,9 @@ import 'sails-test-helper'
 
 describe('Validation', () => {
 
-  beforeEach(function(done) {
-    database.Validations.truncate().then(() => {
-      done();
-    });
+  beforeEach(async function() {
+    await database.Manifests.truncate()
+    await database.Validations.truncate()
   });
 
   it('.create should persist to the database',done => {
@@ -84,7 +83,6 @@ describe('Validation', () => {
       })
     })
     .catch(err => {
-      console.log(err.message)
       assert.strictEqual(err.message, 'Validation error')
       done()
     })
@@ -108,6 +106,25 @@ describe('Validation', () => {
         done()
       })
     })
+  })
+
+  it('.beforeCreate should replace validation_public_key with master_public_key from manifest', async() => {
+    const manifest = {
+      ephemeral_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+      master_public_key: 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B',
+      sequence: 4,
+      signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
+    }
+
+    await database.Manifests.create(manifest)
+
+    const validation = await database.Validations.create({
+      validation_public_key: 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA',
+      ledger_hash: '6B0F79F7447CFAC355748111BB8C816CAE7062FA94675AB30DA237618F3BAD07',
+      signature: '3045022100A762691653A95EEC5B6C820F471482DAF56DB38DA61507889A2E02CEC8CF6C4F02202D08468D83DF8EAC231445382AB21F0046B3516D2A6951FA5C58D54BA16F6492'
+    })
+
+    assert.strictEqual(validation.validation_public_key, manifest.master_public_key)
   })
 })
 
