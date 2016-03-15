@@ -21,7 +21,9 @@ export async function verify() {
 
     // Get the most recent domain verification for this validator
     const verification = await database.Verifications.findOne({
-      where: {validation_public_key: validator},
+      where: {
+        validation_public_key: master_public_key ? master_public_key : validator
+      },
       order: '"createdAt" DESC',
       raw: true
     })
@@ -47,7 +49,7 @@ export async function verify() {
 
         // Record new error
         await database.Verifications.create({
-          validation_public_key: validator,
+          validation_public_key: master_public_key ? master_public_key : validator,
           error: err.type
         })
       }

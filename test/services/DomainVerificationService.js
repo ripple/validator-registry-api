@@ -173,5 +173,29 @@ describe('DomainVerificationService', () => {
       assert.strictEqual(verifications.length, 2)
       assert.strictEqual(verifications[1].error, 'AccountDomainNotFound')
     })
+
+    it('should record error for master key if it exists', async() => {
+
+      const ephemeral_public_key = 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA'
+      const master_public_key = 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B'
+      await database.Manifests.create({
+        ephemeral_public_key: ephemeral_public_key,
+        master_public_key: master_public_key,
+        sequence: 4,
+        signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
+      })
+      await database.Validations.create({
+        validation_public_key: ephemeral_public_key,
+        ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
+      })
+      await DomainVerificationService.verify()
+      const verifications = await database.Verifications.findAll({
+        raw: true
+      })
+      assert(verifications)
+      assert.strictEqual(verifications.length, 1)
+      assert.strictEqual(verifications[0].validation_public_key, master_public_key)
+      assert.strictEqual(verifications[0].error, 'AccountDomainNotFound')
+    })
   })
 })
