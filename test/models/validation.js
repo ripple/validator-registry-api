@@ -13,7 +13,8 @@ describe('Validation', () => {
     const validation = {
       validation_public_key: 'n9LXZBs2aBiNsgBkhVJJjDX4xA4DoEBLycF6q8zRhXD1Zu3Kwbe4',
       ledger_hash: '6B0F79F7447CFAC355748111BB8C816CAE7062FA94675AB30DA237618F3BAD07',
-      signature: '3045022100A762691653A95EEC5B6C820F471482DAF56DB38DA61507889A2E02CEC8CF6C4F02202D08468D83DF8EAC231445382AB21F0046B3516D2A6951FA5C58D54BA16F6492'
+      signature: '3045022100A762691653A95EEC5B6C820F471482DAF56DB38DA61507889A2E02CEC8CF6C4F02202D08468D83DF8EAC231445382AB21F0046B3516D2A6951FA5C58D54BA16F6492',
+      ledger_index: '12345'
     }
 
     database.Validations.create(validation)
@@ -21,6 +22,7 @@ describe('Validation', () => {
       assert.strictEqual(validation.ledger_hash, dbValidation.ledger_hash)
       assert.strictEqual(validation.validation_public_key, dbValidation.validation_public_key)
       assert.strictEqual(validation.signature, dbValidation.signature)
+      assert.strictEqual(validation.ledger_index, dbValidation.ledger_index)
       done()
     })
   })
@@ -67,6 +69,19 @@ describe('Validation', () => {
     })
     .catch(err => {
       assert.strictEqual(err.message, 'notNull Violation: ledger_hash cannot be null')
+      done()
+    })
+  })
+
+  it('.create should require a valid ledger_index',done => {
+
+    database.Validations.create({
+      validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
+      ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
+      ledger_index: '123abc'
+    })
+    .catch(err => {
+      assert.strictEqual(err.message, 'Validation error: Validation isInt failed')
       done()
     })
   })

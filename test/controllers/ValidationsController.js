@@ -7,7 +7,7 @@ describe('ValidationsController', () => {
     });
   });
 
-  describe('GET /validators/:validation_public_key/validations', () => {
+  describe.skip('GET /validators/:validation_public_key/validations', () => {
     const validator = 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz'
     beforeEach((done) => {
       database.Validations.create({
@@ -38,17 +38,30 @@ describe('ValidationsController', () => {
     })
   })
 
-  describe('GET /ledgers/:ledger_hash/validations', () => {
+  describe('GET /ledgers/{:ledger_hash/ledger_index}/validations', () => {
     const ledger_hash = 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
+    const ledger_index = '20000000'
     beforeEach((done) => {
       database.Validations.create({
         validation_public_key: 'n9LigbVAi4UeTtKGHHTXNcpBXwBPdVKVTjbSkLmgJvTn6qKB8Mqz',
-        ledger_hash: ledger_hash
+        ledger_hash: ledger_hash,
+        ledger_index: ledger_index
       }).then(() => done())
     })
 
     it('.show should return validations for ledger_hash',done => {
       request.get(`/ledgers/${ledger_hash}/validations`)
+        .expect(200)
+        .end((err, resp) => {
+          expect(resp.body.validations).to.be.instanceof(Array)
+          expect(resp.body.validations).to.have.length(1)
+          expect(resp.body.validations[0].ledger_hash).to.equal(ledger_hash)
+          done()
+        })
+    })
+
+    it('.show should return validations for ledger_index',done => {
+      request.get(`/ledgers/${ledger_index}/validations`)
         .expect(200)
         .end((err, resp) => {
           expect(resp.body.validations).to.be.instanceof(Array)
