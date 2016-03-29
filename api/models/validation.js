@@ -48,5 +48,14 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+
+  Validation.beforeCreate(async function(validation, options, fn) {
+    // Store master key if validation is signed by a known valid ephemeral key
+    const master_public_key = database.Manifests.getMasterKey(validation.validation_public_key)
+    if (master_public_key) {
+      validation.validation_public_key = master_public_key
+    }
+    fn(null, validation)
+  })
   return Validation;
 };

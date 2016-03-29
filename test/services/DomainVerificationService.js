@@ -4,11 +4,13 @@ import 'sails-test-helper'
 describe('DomainVerificationService', () => {
 
   before(async() => {
+    await database.Manifests.truncate()
     await database.Verifications.truncate()
     await database.Validations.truncate()
   });
 
   afterEach(async() => {
+    await database.Manifests.truncate()
     await database.Verifications.truncate()
     await database.Validations.truncate()
   });
@@ -30,6 +32,70 @@ describe('DomainVerificationService', () => {
       })
       assert(verification)
       assert.strictEqual(verification.domain, 'ripple.com')
+    })
+
+    it('should record verified validator domains using master key from manifest', async() => {
+
+      const ephemeral_public_key = 'n9LYyd8eUVd54NQQWPAJRFPM1bghJjaf1rkdji2haF4zVjeAPjT2'
+      const master_public_key = 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB'
+
+      await database.Manifests.create({
+        ephemeral_public_key: ephemeral_public_key,
+        master_public_key: master_public_key,
+        sequence: 2,
+        signature: 'f1ae38a72398cf2cfcb3e3d90ec9459d46a5b5e1dc880e11eaa3dcebb1ca2072259953c993980573be9a4158fbea3ea9f993825d8764c57681470858ab1a060e'
+      })
+      await database.Validations.create({
+        validation_public_key: ephemeral_public_key,
+        ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
+      })
+      await DomainVerificationService.verify()
+      const verification = await database.Verifications.findOne({
+        where: {
+          validation_public_key: master_public_key
+        }
+      })
+      assert(verification)
+      assert.strictEqual(verification.domain, 'testnet.ripple.com')
+
+      const missing_verification = await database.Verifications.findOne({
+        where: {
+          validation_public_key: ephemeral_public_key
+        }
+      })
+      assert(!missing_verification)
+    })
+
+    it('should not record AccountDomainNotFound for previously verified master public key', async() => {
+
+      const ephemeral_public_key = 'n9KwwpYCU3ctereLW9S48fKjK4rcsvYbHmjgiRXkgWReQR9nDjCw'
+      const master_public_key = 'nHUkAWDR4cB8AgPg7VXMX6et8xRTQb2KJfgv1aBEXozwrawRKgMB'
+      const domain = 'testnet.ripple.com'
+
+      await database.Manifests.create({
+        ephemeral_public_key: ephemeral_public_key,
+        master_public_key: master_public_key,
+        sequence: 3,
+        signature: '90ab59998626c2abaf1eeee6e17fdfd47aa8a0f5d17b0ce7fcc1fbe960e0f05d7fe940920ee27b76ba2fe252f34fbbd6ef5c754e4ac220a6966f110b7e2b880e'
+      })
+      await database.Validations.create({
+        validation_public_key: ephemeral_public_key,
+        ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
+      })
+      await database.Verifications.create({
+        validation_public_key: master_public_key,
+        domain: domain
+      })
+      await DomainVerificationService.verify()
+      const verification = await database.Verifications.findOne({
+        where: {
+          validation_public_key: master_public_key
+        },
+        order: '"createdAt" DESC',
+        raw: true
+      })
+      assert(verification)
+      assert.strictEqual(verification.domain, 'testnet.ripple.com')
     })
 
     it('should record domain verification errors', async() => {
@@ -83,6 +149,53 @@ describe('DomainVerificationService', () => {
       })
       assert(verifications)
       assert.strictEqual(verifications.length, 1)
+    })
+
+    it('should record error if domain is no longer verified', async() => {
+
+      const validation_public_key = 'n9KwwpYCU3ctereLW9S48fKjK4rcsvYbHmjgiRXkgWReQR9nDjCw'
+      await database.Validations.create({
+        validation_public_key: validation_public_key,
+        ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A',
+      })
+      await database.Verifications.create({
+        validation_public_key: validation_public_key,
+        domain: 'rippletest.net'
+      })
+      await DomainVerificationService.verify()
+      const verifications = await database.Verifications.findAll({
+        where: {
+          validation_public_key: validation_public_key
+        },
+        raw: true
+      })
+      assert(verifications)
+      assert.strictEqual(verifications.length, 2)
+      assert.strictEqual(verifications[1].error, 'AccountDomainNotFound')
+    })
+
+    it('should record error for master key if it exists', async() => {
+
+      const ephemeral_public_key = 'n9LRZXPh1XZaJr5kVpdciN76WCCcb5ZRwjvHywd4Vc4fxyfGEDJA'
+      const master_public_key = 'nHU5wPBpv1kk3kafS2ML2GhyoGJuHhPP4fCa2dwYUjMT5wR8Dk5B'
+      await database.Manifests.create({
+        ephemeral_public_key: ephemeral_public_key,
+        master_public_key: master_public_key,
+        sequence: 4,
+        signature: 'ba37041d4d9739ebf721a75f7a9e408d92b9920e71a6af5a9fe11e88f05c8937771e1811cf262f489b69c67cc80c96518a6e5c17091dd743246229d21ee2c00c'
+      })
+      await database.Validations.create({
+        validation_public_key: ephemeral_public_key,
+        ledger_hash: 'CD88E6F183A139CDC13A0278E908475C83DBA096C85124C4E94895B10EA3FB8A'
+      })
+      await DomainVerificationService.verify()
+      const verifications = await database.Verifications.findAll({
+        raw: true
+      })
+      assert(verifications)
+      assert.strictEqual(verifications.length, 1)
+      assert.strictEqual(verifications[0].validation_public_key, master_public_key)
+      assert.strictEqual(verifications[0].error, 'AccountDomainNotFound')
     })
   })
 })
