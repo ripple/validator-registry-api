@@ -1,9 +1,10 @@
 ---
 - name: Stand up application container host
   hosts: web
-  sudo: true
+  become: true
   user: ec2-user
   vars:
+    nginx_default_config: "/opt/validators.ripple.com/default.conf"
     nginx_config: "/opt/validators.ripple.com/nginx.conf"
     nginx_topsubdomain_ssl_key: "/opt/validators.ripple.com/topsubdomain-server.key"
     nginx_topsubdomain_ssl_cert: "/opt/validators.ripple.com/topsubdomain-server.crt"
@@ -36,6 +37,8 @@
       file: state=directory name={{nginx_webui_root}} owner=ec2-user group=ec2-user
     - name: Install docker container logrotate config file
       copy: src=docker-logrotate dest=/etc/logrotate.d/docker-container
+    - name: Install nginx default config
+      copy: src=default.conf dest={{nginx_default_config}} mode=u+r
     - name: Configure nginx
       template: src=templates/nginx.conf dest={{nginx_config}} mode=u+r
     - name: Install SSL key

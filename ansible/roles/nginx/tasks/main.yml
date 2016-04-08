@@ -11,6 +11,7 @@
       - "443:443"
       - "80:80"
     volumes:
+      - "{{nginx_default_config}}:/etc/nginx/conf.d/default.conf:ro"
       - "{{nginx_config}}:/etc/nginx/conf.d/validators.ripple.com.conf:ro"
       - "{{nginx_topsubdomain_ssl_key}}:/etc/nginx/ssl/topsubdomain/server.key:ro"
       - "{{nginx_topsubdomain_ssl_cert}}:/etc/nginx/ssl/topsubdomain/server.crt:ro"
