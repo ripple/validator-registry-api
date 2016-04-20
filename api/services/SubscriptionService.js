@@ -68,7 +68,8 @@ export function subscribe(ip) {
       database.Validations.create({
         validation_public_key: data.validation_public_key,
         ledger_hash: data.ledger_hash,
-        signature: data.signature
+        signature: data.signature,
+        ledger_index: data.ledger_index
       }).catch(error => {
         if (error.name!=='SequelizeUniqueConstraintError') {
           console.log(error)

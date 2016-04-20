@@ -26,6 +26,12 @@ module.exports = function(sequelize, DataTypes) {
     signature: {
       type     : DataTypes.STRING
     },
+    ledger_index: {
+      type     : DataTypes.STRING,
+      validate: {
+        isInt: true
+      }
+    },
     createdAt: {
       type     : DataTypes.DATE
     },

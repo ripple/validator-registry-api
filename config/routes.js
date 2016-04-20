@@ -42,12 +42,13 @@ module.exports.routes = {
     action: 'show'
   },
 
-  '/validators/:validation_public_key/validations': {
-    controller: 'validations',
-    action: 'indexByValidator'
-  },
+  // TODO: add paging
+  // '/validators/:validation_public_key/validations': {
+  //   controller: 'validations',
+  //   action: 'indexByValidator'
+  // },
 
-  '/ledgers/:ledger_hash/validations': {
+  '/ledgers/:ledger/validations': {
     controller: 'validations',
     action: 'indexByLedger'
   }

@@ -14,6 +14,8 @@ module.exports = {
    * @apiName historicalReports
    * @apiGroup Reports
    *
+   * @apiParam {ValidationPublicKey} validation_public_key ripple validation public key
+   *
    * @apiSuccess {Array} reports Array of Report objects with date, validations properties
    * @apiSuccess {Date} report.date date of report formatted as YYYY-MM-DD
    * @apiSuccess {Array} report.cluster Array of Ripple validation public keys used for agreement benchmark
@@ -71,6 +73,8 @@ module.exports = {
    * @api {get} /reports/:date Report for all validators from specified date
    * @apiName report
    * @apiGroup Reports
+   *
+   * @apiParam {Date} date date of report formatted as YYYY-MM-DD
    *
    * @apiSuccess {Date} date date of report formatted as YYYY-MM-DD
    * @apiSuccess {Array} cluster Array of Ripple validation public keys used for agreement benchmark
