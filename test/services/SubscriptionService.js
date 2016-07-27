@@ -27,7 +27,7 @@ describe('SubscriptionService', () => {
     it('should open websocket connections to rippleds', async(done) => {
 
       const rippleds = [{
-        ip: 's1.ripple.com:51235',
+        ip: 's1.ripple.com',
         version: 'rippled-0.30.0'
       }]
       const connections = await SubscriptionService.subscribeToRippleds(rippleds)
