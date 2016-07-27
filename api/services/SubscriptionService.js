@@ -8,8 +8,8 @@ const WS_PORT = '51233'
 let connections = {}
 
 export async function getRippleds(api_url) {
-  const response = await request.get(`${api_url}/rippleds`)
-  return response.body
+  const response = await request.get(`${api_url}`)
+  return response.body.nodes
 }
 
 function requestSubscribe(ws) {
@@ -100,9 +100,9 @@ export async function subscribeToRippleds(rippleds) {
 
   // Subscribe to validation and manifest websocket subscriptions from rippleds
   for (let rippled of rippleds) {
-    if (!rippled.ipp) continue;
+    if (!rippled.ip) continue;
 
-    const ip = 'ws://'+rippled.ipp.replace(PEER_PORT_REGEX, WS_PORT)
+    const ip = 'ws://'+rippled.ip.replace(PEER_PORT_REGEX, WS_PORT)
     subscribe(ip)
   }
 
