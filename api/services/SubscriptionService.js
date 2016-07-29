@@ -2,14 +2,13 @@ import {CronJob} from 'cron'
 import request from 'superagent'
 import WebSocket from 'ws'
 
-const PEER_PORT_REGEX = /51235/g
 const WS_PORT = '51233'
 
 let connections = {}
 
 export async function getRippleds(api_url) {
-  const response = await request.get(`${api_url}/rippleds`)
-  return response.body
+  const response = await request.get(`${api_url}`)
+  return response.body.nodes
 }
 
 function requestSubscribe(ws) {
@@ -68,7 +67,8 @@ export function subscribe(ip) {
       database.Validations.create({
         validation_public_key: data.validation_public_key,
         ledger_hash: data.ledger_hash,
-        signature: data.signature
+        signature: data.signature,
+        ledger_index: data.ledger_index
       }).catch(error => {
         if (error.name!=='SequelizeUniqueConstraintError') {
           console.log(error)
@@ -99,9 +99,8 @@ export async function subscribeToRippleds(rippleds) {
 
   // Subscribe to validation and manifest websocket subscriptions from rippleds
   for (let rippled of rippleds) {
-    if (!rippled.ipp) continue;
-
-    const ip = 'ws://'+rippled.ipp.replace(PEER_PORT_REGEX, WS_PORT)
+    if (!rippled.ip) continue;
+    const ip = `ws://${rippled.ip}:${WS_PORT}`
     subscribe(ip)
   }
 

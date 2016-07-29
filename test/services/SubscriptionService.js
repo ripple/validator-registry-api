@@ -18,7 +18,7 @@ describe('SubscriptionService', () => {
       const rippleds = await SubscriptionService.getRippleds(process.env.PEERS_API_URL)
       expect(rippleds).to.be.instanceof(Array)
       expect(rippleds[0].version).to.exist
-      expect(rippleds[0].public_key).to.exist
+      expect(rippleds[0].node_public_key).to.exist
     })
   })
 
@@ -27,7 +27,7 @@ describe('SubscriptionService', () => {
     it('should open websocket connections to rippleds', async(done) => {
 
       const rippleds = [{
-        ipp: 's1.ripple.com:51235',
+        ip: 's1.ripple.com',
         version: 'rippled-0.30.0'
       }]
       const connections = await SubscriptionService.subscribeToRippleds(rippleds)
