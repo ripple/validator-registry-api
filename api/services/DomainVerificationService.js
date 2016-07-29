@@ -38,6 +38,9 @@ export async function verify() {
         })
       }
     } catch(err) {
+      if (!err.type) {
+        err.type = 'AccountDomainNotFound'
+      }
       if (err.type==='AccountDomainNotFound' && master_public_key &&
           verification && verification.domain) {
 
