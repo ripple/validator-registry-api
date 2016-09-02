@@ -31,10 +31,6 @@ sequelize db:migrate --url YOUR_POSTGRES_DB_URL
 DATABASE_URL=YOUR_POSTGRES_DB_URL PEERS_API_URL=YOUR_PEERS_API_URL npm start
 ````
 
-## API Documentation
-
-(https://api-staging.validators.ripple.com)[https://api-staging.validators.ripple.com]
-
 # Local Development
 
 To hack on validators-registry-api, you'll need:
@@ -73,7 +69,7 @@ $ docker-compose run webapp npm test
 
 NOTE: Tests truncate local db tables
 
-# Deployment to api.validators.ripple.com
+# Deployment
 
 Check the README in the ansible/ directory
 
